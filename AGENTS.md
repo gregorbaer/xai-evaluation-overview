@@ -1,0 +1,4 @@
+- Use red/green TDD
+- Run tests with `uv run pytest -q`
+- Use `uv run ...` to execute project commands
+- Write google docstrings
