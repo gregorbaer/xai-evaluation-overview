@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Evaluation of Explainable AI for Time Series</title>
+    <meta
+      name="description"
+      content="A research overview of papers and tools on evaluating explainable AI methods for time-series models."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="topbar" aria-label="Page sections">
+        <a class="brand" href="#top">
+          <img
+            class="brand-portrait"
+            src="assets/profile-pic-round.png"
+            alt=""
+            aria-hidden="true"
+          >
+          <span>Gregor Baer</span>
+        </a>
+        <div class="nav-links">
+          <a href="#papers">Papers</a>
+          <a href="#metrics">Metrics</a>
+          <a href="#tool">Tool</a>
+        </div>
+      </nav>
+
+      <section class="hero" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">Research overview</p>
+          <h1>Evaluation of Explainable AI for Time Series</h1>
+          <p class="intro">
+            My PhD research focuses on evaluating explanations for time-series
+            AI systems. This page collects work on perturbation metrics,
+            ground-truth evaluation, and human understanding.
+          </p>
+          <div class="hero-actions" aria-label="Primary links">
+            <a class="button primary" href="#papers">View the papers/projects</a>
+            <a
+              class="button secondary"
+              href="https://scholar.google.com/citations?hl=en&amp;user=bhR-GboAAAAJ&amp;view_op=list_works&amp;sortby=pubdate"
+            >
+              Google Scholar
+            </a>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section section-lead" id="papers">
+        <div class="section-heading">
+          <div class="section-title">
+            <p class="eyebrow">Perturbation metrics</p>
+            <h2>Class-dependent evaluation effects</h2>
+          </div>
+          <p>
+            Perturbation analysis is often used to evaluate whether feature
+            attributions are correct. These papers study when that evaluation
+            depends on the predicted class, and what that means for trusting the
+            scores.
+          </p>
+        </div>
+
+        <article class="project project-featured">
+          <div class="project-copy">
+            <p class="tag">Paper 1</p>
+            <h3>Class-dependent perturbation effects in evaluating time-series attributions</h3>
+            <p class="takeaway">
+              Takeaway: perturbation-based scores can look strong for one class
+              and weak for another, even within the same dataset and model.
+            </p>
+            <p>
+              We evaluate time-series attribution methods across datasets, model
+              architectures, and perturbation strategies. The results suggest that
+              class-aware reporting is needed, because aggregate scores can hide
+              systematic differences between classes.
+            </p>
+            <p class="citation">
+              Baer, G., Grau, I., Zhang, C., &amp; Van Gorp, P. (2025).
+              <em>Class-Dependent Perturbation Effects in Evaluating Time Series
+              Attributions.</em> Explainable Artificial Intelligence, 292-314.
+            </p>
+            <div class="link-row">
+              <a class="button primary" href="https://doi.org/10.1007/978-3-032-08330-2_14">DOI</a>
+              <a class="button secondary" href="https://arxiv.org/abs/2502.17022">Open version</a>
+            </div>
+          </div>
+          <figure class="project-visual portrait-visual">
+            <img
+              src="assets/fig_class-dependent-perturbation-effects.png"
+              alt="Schematic of perturbing the most relevant parts of a time series."
+            >
+          </figure>
+        </article>
+
+        <article class="project project-featured project-reverse">
+          <div class="project-copy">
+            <p class="tag">Paper 2</p>
+            <h3>Why do class-dependent evaluation effects occur?</h3>
+            <p class="takeaway">
+              Takeaway: class-dependent effects can arise from simple differences
+              in synthetic features, and perturbation scores may disagree with
+              ground-truth metrics.
+            </p>
+            <p>
+              We use controlled synthetic time series where the relevant feature
+              locations are known. This lets us compare perturbation-based
+              degradation scores with ground-truth evaluation and study when the
+              two views of attribution quality diverge.
+            </p>
+            <p class="citation">
+              Baer, G., Grau, I., Zhang, C., &amp; Van Gorp, P. (2026).
+              <em>Why do Class-Dependent Evaluation Effects Occur with Time Series
+              Feature Attributions?</em> Machine Learning and Principles and
+              Practice of Knowledge Discovery in Databases, 380-395.
+            </p>
+            <div class="link-row">
+              <a class="button primary" href="https://doi.org/10.1007/978-3-032-19105-2_27">DOI</a>
+              <a class="button secondary" href="https://arxiv.org/abs/2506.11790">Open version</a>
+            </div>
+          </div>
+          <figure class="project-visual tall-visual">
+            <img
+              src="assets/fig_cdpe-why-schematic.png"
+              alt="Study setup comparing perturbation metrics and ground-truth metrics between classes."
+            >
+          </figure>
+        </article>
+      </section>
+
+      <section class="section section-muted" id="metrics">
+        <div class="section-heading">
+          <div class="section-title">
+            <p class="eyebrow">Human outcomes</p>
+            <h2>Metrics and human understanding</h2>
+          </div>
+          <p>
+            A computational score is useful only if we know what it tells us.
+            This project studies how explanation correctness relates to whether
+            people can understand an AI decision pattern.
+          </p>
+        </div>
+
+        <article class="project project-single">
+          <div class="project-copy">
+            <p class="tag">User study</p>
+            <h3>Does explanation correctness matter?</h3>
+            <p class="takeaway">
+              Takeaway: lower correctness can reduce human understanding, but the
+              relationship is not a smooth one-to-one mapping.
+            </p>
+            <p>
+              Participants used explanations to predict an AI system's decisions
+              in a time-series task. The results suggest that functional metrics
+              should be validated against human outcomes, because better scores
+              do not always translate into equally better understanding.
+            </p>
+            <p class="citation">
+              Baer, G., Zhang, C., Grau, I., &amp; Van Gorp, P. (2026).
+              <em>Does Explanation Correctness Matter? Linking Computational XAI
+              Evaluation to Human Understanding.</em> arXiv:2603.25251.
+            </p>
+            <div class="link-row">
+              <a class="button primary" href="https://doi.org/10.48550/arXiv.2603.25251">DOI</a>
+              <a class="button secondary" href="https://arxiv.org/abs/2603.25251">arXiv</a>
+            </div>
+          </div>
+          <figure class="project-visual medium-visual">
+            <img
+              src="assets/fig_study_design_correctness_understanding.png"
+              alt="User study design with training, testing, and survey phases."
+            >
+          </figure>
+        </article>
+      </section>
+
+      <section class="section" id="tool">
+        <div class="section-heading">
+          <div class="section-title">
+            <p class="eyebrow">Synthetic data</p>
+            <h2>Tools for controlled evaluation</h2>
+          </div>
+          <p>
+            xaitimesynth is a small package for synthetic time-series XAI
+            evaluation. It creates datasets with known ground truth so
+            attribution methods can be tested in controlled settings.
+          </p>
+        </div>
+
+        <article class="project tool-project">
+          <div class="project-copy">
+            <p class="tag">Package</p>
+            <h3>Ground-truth based evaluation for time-series explanations</h3>
+            <p class="takeaway">
+              Takeaway: synthetic data can make evaluation assumptions visible,
+              because the relevant time points are known by design.
+            </p>
+            <p>
+              The package provides dataset generation tools, examples, and
+              documentation for evaluating feature attributions on synthetic time
+              series. It is useful when you want a controlled setting before
+              moving to messier real-world data.
+            </p>
+            <div class="link-row">
+              <a class="button primary" href="https://gregorbaer.github.io/xaitimesynth/">Documentation</a>
+              <a class="button secondary" href="https://github.com/gregorbaer/xaitimesynth">GitHub</a>
+            </div>
+          </div>
+          <figure class="project-visual tool-visual">
+            <img
+              class="tool-logo"
+              src="https://raw.githubusercontent.com/gregorbaer/xaitimesynth/main/docs/assets/logo/xaitimesynth_logo.svg"
+              alt="xaitimesynth logo"
+            >
+            <img
+              src="https://raw.githubusercontent.com/gregorbaer/xaitimesynth/main/docs/assets/images/quickstart_dataset.png"
+              alt="Example synthetic time-series dataset generated with xaitimesynth."
+            >
+          </figure>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-meta">
+        <p>
+          Gregor Baer, PhD candidate in explainable AI at Eindhoven University of
+          Technology.
+        </p>
+        <p class="ai-disclaimer">This website was generated with the help of AI coding tools.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=bhR-GboAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">
+          Google Scholar
+        </a>
+        <a href="https://github.com/gregorbaer">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>
