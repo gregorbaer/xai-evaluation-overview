@@ -116,15 +116,16 @@ def test_topbar_has_concise_navigation_and_portrait():
     """Check the topbar carries concise page navigation and a personal cue."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     parser = parse_site()
+    topbar_html = html.split('<nav class="topbar"', maxsplit=1)[1].split("</nav>", maxsplit=1)[0]
 
     assert "Paper 1 open version" not in html
     assert "Paper 2 open version" not in html
     assert "View the papers/projects" not in html
     assert 'class="hero-actions"' not in html
-    assert ">Computational</a>" in html
-    assert ">Human</a>" in html
-    assert ">Tools</a>" in html
-    assert ">Scholar</a>" in html
+    assert ">Computational</a>" in topbar_html
+    assert ">Human</a>" in topbar_html
+    assert ">Tools</a>" in topbar_html
+    assert ">Scholar</a>" not in topbar_html
     assert 'class="brand-portrait"' in html
     assert 'class="researcher-portrait"' not in html
     assert any(image.get("src") == "assets/profile-pic-round.png" for image in parser.images)
@@ -248,6 +249,25 @@ def test_project_figure_surfaces_are_neutral():
     assert "linear-gradient" not in gallery_frame_rule
     assert "linear-gradient" not in figure_stack_rule
     assert "var(--green-soft)" not in figure_stack_rule
+
+
+def test_mobile_gallery_figures_can_shrink_to_screen_width():
+    """Check mobile gallery frames do not force figures wider than their card."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    mobile_rule = css.split("@media (max-width: 640px) {", maxsplit=1)[1]
+    gallery_frame_rule = mobile_rule.split(".gallery-frame {", maxsplit=1)[1].split(
+        "}",
+        maxsplit=1,
+    )[0]
+    gallery_image_rule = mobile_rule.split(".gallery-main-image {", maxsplit=1)[1].split(
+        "}",
+        maxsplit=1,
+    )[0]
+
+    assert "min-height: 0" in gallery_frame_rule
+    assert "aspect-ratio: auto" in gallery_frame_rule
+    assert "height: auto" in gallery_image_rule
+    assert "max-height: none" in gallery_image_rule
 
 
 def test_footer_includes_subtle_ai_disclaimer():
