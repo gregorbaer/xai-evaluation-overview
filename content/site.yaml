@@ -148,7 +148,8 @@ sections:
         body:
           - >-
             In a user study, participants used explanations to predict an AI system's
-            decisions (what we call forward simulation) in a time-series classification task. 
+            decisions in a time-series classification task. 
+            This task is called forward simulation and can be seen as a proxy measure for understanding. 
             The study controlled explanation correctness at four levels and found that understanding dropped
             at 70% and 55% correctness compared with fully correct explanations, but did
             not keep dropping below 70%. 
