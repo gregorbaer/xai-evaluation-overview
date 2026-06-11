@@ -232,6 +232,9 @@ sections:
           - label: GitHub
             href: https://github.com/gregorbaer/xaitimesynth
             style: secondary
+          - label: arXiv
+            href: https://arxiv.org/abs/2603.06781
+            style: secondary
         figures:
           - src: https://raw.githubusercontent.com/gregorbaer/xaitimesynth/main/docs/assets/logo/xaitimesynth_logo.svg
             alt: xaitimesynth logo

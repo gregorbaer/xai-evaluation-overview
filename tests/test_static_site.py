@@ -328,12 +328,13 @@ def test_expected_external_links_are_present():
         "https://arxiv.org/abs/2603.25251",
         "https://gregorbaer.github.io/xaitimesynth/",
         "https://github.com/gregorbaer/xaitimesynth",
+        "https://arxiv.org/abs/2603.06781",
         "https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate",
     }
 
     assert expected_links.issubset(set(parser.links))
     assert "Open access" not in html
-    assert html.count(">arXiv</a>") == 3
+    assert html.count(">arXiv</a>") == 4
 
 
 def test_readme_documents_website_generation_workflow():
