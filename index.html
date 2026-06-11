@@ -6,7 +6,7 @@
     <title>Evaluation of Explainable AI for Time Series</title>
     <meta
       name="description"
-      content="A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD. Includes work on evaluating explainable AI methods fortime-series models, including perturbation metrics, ground-truth evaluation, human understanding, and xaitimesynth."
+      content="A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD. Contains work on evaluating explainable AI methods for time-series models, including perturbation metrics, ground-truth evaluation, human understanding, and xaitimesynth."
     >
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -21,7 +21,6 @@
           <a href="#papers">Computational</a>
           <a href="#metrics">Human</a>
           <a href="#tool">Tools</a>
-          <a href="https://scholar.google.com/citations?hl=en&amp;user=bhR-GboAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">Scholar</a>
         </div>
       </nav>
 
@@ -44,15 +43,15 @@
             <p class="eyebrow">Perturbation metrics</p>
             <h2>Class-dependent evaluation effects</h2>
           </div>
-          <p>Perturbation analysis is often used to evaluate whether feature attributions are correct. In the below projects, we studied when that evaluation depends on the predicted class, and what that means for trusting the perturbation metrics.</p>
+          <p>Perturbation analysis is often used to evaluate how "correct" explanations are.  In the below projects, we studied when that evaluation depends on the predicted class,  and what that means for trusting the perturbation metrics. Here, we applied evaluation metrics to feature attribution explanations,  which compute importance scores to input features (time points) for a specific prediction.</p>
         </div>
 
         <article class="project project-featured">
           <div class="project-copy">
             <p class="tag">Paper 1</p>
             <h3>Class-dependent perturbation effects in evaluating time-series attributions</h3>
-            <p class="takeaway">Takeaway: Perturbation-based attribution metrics can behave very differently across classes, even for the same dataset and model. This means strong aggregate scores may reflect class-specific model behavior rather than better attribution quality.</p>
-            <p>The paper evaluates time-series attribution methods across datasets, model architectures, and perturbation strategies. It finds that perturbation metrics can be sensitive for some classes and much less sensitive for others, with the strongest perturbation strategies often showing the largest class differences.</p>
+            <p class="takeaway">Takeaway: Perturbation-based evaluation metrics can behave very differently across classes, even for the same dataset and model. This implies strong aggregate scores can reflect class-specific model behavior rather than better attribution quality.</p>
+            <p>The paper evaluates feature attribution explanation methods across datasets, model architectures, and perturbation strategies in the context of time series classification.  It finds that perturbation metrics can be sensitive for some classes and much less sensitive for others, with the strongest perturbation strategies often showing the largest class differences.</p>
             <p class="citation"><em>Baer, G., Grau, I., Zhang, C., &amp; Van Gorp, P. (2025).  Class-Dependent Perturbation Effects in Evaluating Time Series Attributions.  In R. Guidotti, U. Schmid, &amp; L. Longo (Eds.),  Explainable Artificial Intelligence (pp. 292–314).  Springer Nature Switzerland. https://doi.org/10.1007/978-3-032-08330-2_14</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.1007/978-3-032-08330-2_14">DOI</a>
@@ -64,9 +63,9 @@
               <div class="gallery-frame">
                 <img class="gallery-main-image" src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" alt="Schematic of perturbing the most relevant parts of a time series.">
               </div>
-              <figcaption class="gallery-caption">You can computationally evaluate explanations by replacing input data points in the order of most important features, and seeing how the predictions change.</figcaption>
+              <figcaption class="gallery-caption">You can computationally evaluate explanations with perturbation by replacing input data points in the order of most (or least) important features, and seeing how the predictions change.</figcaption>
               <div class="gallery-thumbs" aria-label="Project figures">
-                <button class="gallery-thumb" type="button" aria-label="Show figure 1" aria-current="true" data-gallery-target="class-dependent-perturbation-effects" data-gallery-src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" data-gallery-alt="Schematic of perturbing the most relevant parts of a time series." data-gallery-caption="You can computationally evaluate explanations by replacing input data points in the order of most important features, and seeing how the predictions change.">
+                <button class="gallery-thumb" type="button" aria-label="Show figure 1" aria-current="true" data-gallery-target="class-dependent-perturbation-effects" data-gallery-src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" data-gallery-alt="Schematic of perturbing the most relevant parts of a time series." data-gallery-caption="You can computationally evaluate explanations with perturbation by replacing input data points in the order of most (or least) important features, and seeing how the predictions change.">
                   <img src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" alt="" aria-hidden="true">
                 </button>
                 <button class="gallery-thumb" type="button" aria-label="Show figure 2" aria-current="false" data-gallery-target="class-dependent-perturbation-effects" data-gallery-src="assets/class-dependent-perturbation-effects/fig2_cd_distribution.png" data-gallery-alt="Distributions of perturbation metric for different attribution methods, showing class-dependent effects." data-gallery-caption="The distributions of computational evaluation metrics show clear differences per class across different attribution methods.">
@@ -87,9 +86,9 @@
           <div class="project-copy">
             <p class="tag">Paper 2</p>
             <h3>Why do class-dependent evaluation effects occur?</h3>
-            <p class="takeaway">Takeaway: Class-dependent evaluation effects can come from simple differences between class features, such as amplitude or duration. Additionally, perturbation metrics can disagree with ground-truth metrics,  so you may want to be careful in comparisons.</p>
+            <p class="takeaway">Takeaway: Class-dependent evaluation effects can come from simple differences between class features, such as amplitude or duration. Additionally, perturbation metrics can disagree with ground-truth metrics,  so you may want to be careful in making comparisons.</p>
             <p>The paper uses synthetic time series with known relevant feature locations to study when class-dependent evaluation effects occur. By varying feature types and class contrasts, it shows that these effects can appear even in simple controlled settings.</p>
-            <p>The results show that perturbation-based degradation scores and ground-truth precision-recall metrics often give different views of attribution quality across classes.</p>
+            <p>The results show that perturbation-based evaluation metrics and ground-truth-based metrics often provide different views of attribution quality across classes.</p>
             <p class="citation"><em>Baer, G., Grau, I., Zhang, C., &amp; Van Gorp, P. (2026).  Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions?  A Synthetic Data Investigation.  In I. Koprinska, J. Mendes-Moreira, &amp; P. Branco (Eds.),  Machine Learning and Principles and Practice of Knowledge Discovery in Databases  (pp. 380–395). Springer Nature Switzerland.  https://doi.org/10.1007/978-3-032-19105-2_27</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.1007/978-3-032-19105-2_27">DOI</a>
@@ -130,10 +129,10 @@
         <article class="project project-single">
           <div class="project-copy">
             <p class="tag">User study</p>
-            <h3>Does explanation correctness matter?</h3>
-            <p class="takeaway">Takeaway: Explanation correctness can affect human understanding, but the relationship is  not necessarily one-to-one. Incorrect explanations can hurt understanding, while correct ones do not guarantee that people learn (and understand) the model's decision pattern.</p>
-            <p>In a user study, participants used explanations to predict an AI system's decisions in a time-series classification task. The study controlled explanation correctness at four levels and found that understanding dropped at 70% and 55% correctness compared with fully correct explanations, but did not keep dropping below 70%.</p>
-            <p>The results suggest that computational XAI metrics should not be treated as direct proxies for human understanding. Correctness can help, but people differ in whether they learn from explanations, and self-reported understanding does not always match actual task performance.</p>
+            <h3>Linking Computational XAI Evaluation to Human Understanding</h3>
+            <p class="takeaway">Takeaway: Explanation correctness can affect human understanding, but the relationship is not always straightforward.  Incorrect explanations can hurt understanding, while correct ones do not guarantee that  people learn (and understand) the model's decision pattern.</p>
+            <p>In a user study, participants used explanations to predict an AI system's decisions (what we call forward simulation) in a time-series classification task.  The study controlled explanation correctness at four levels and found that understanding dropped at 70% and 55% correctness compared with fully correct explanations, but did not keep dropping below 70%.  100% and 85% correct explanations are statistically indistinguishable in terms of forward simulation accuracy.</p>
+            <p>The results suggest that computational XAI evaluation metrics should not be treated as direct proxies for human understanding. Correctness can help, but people differ in whether they learn from explanations, and self-reported understanding does not always match actual task performance.</p>
             <p class="citation"><em>Baer, G., Zhang, C., Grau, I., &amp; Van Gorp, P. (2026).  Does Explanation Correctness Matter?  Linking Computational XAI Evaluation to Human Understanding.  https://arxiv.org/abs/2603.25251v1</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.48550/arXiv.2603.25251">DOI</a>
