@@ -188,10 +188,11 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 10px 16px;
+  min-height: 38px;
+  padding: 8px 13px;
   border: 1px solid transparent;
   border-radius: 999px;
+  font-size: 0.92rem;
   font-weight: 750;
   line-height: 1.1;
   text-decoration: none;
