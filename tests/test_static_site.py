@@ -308,6 +308,21 @@ def test_footer_includes_subtle_ai_disclaimer():
     assert ".ai-disclaimer" in css
 
 
+def test_footer_links_include_icons_and_visible_labels():
+    """Check profile links keep recognizable icons without becoming icon-only."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    footer_links = html.split('<div class="footer-links">', maxsplit=1)[1].split(
+        "</div>",
+        maxsplit=1,
+    )[0]
+
+    assert footer_links.count('class="footer-icon"') == 3
+    assert footer_links.count('aria-hidden="true"') >= 3
+    assert '<span class="footer-link-label">Google Scholar</span>' in footer_links
+    assert '<span class="footer-link-label">GitHub</span>' in footer_links
+    assert '<span class="footer-link-label">LinkedIn</span>' in footer_links
+
+
 def test_expected_sections_exist():
     """Check the major GitHub Pages sections are present."""
     parser = parse_site()
@@ -379,6 +394,7 @@ def test_expected_external_links_are_present():
         "https://github.com/gregorbaer/xaitimesynth",
         "https://arxiv.org/abs/2603.06781",
         "https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate",
+        "https://www.linkedin.com/in/gregorbaer/",
     }
 
     assert expected_links.issubset(set(parser.links))

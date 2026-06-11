@@ -240,5 +240,10 @@ footer:
   links:
     - label: Google Scholar
       href: https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate
+      icon: scholar
     - label: GitHub
       href: https://github.com/gregorbaer
+      icon: github
+    - label: LinkedIn
+      href: https://www.linkedin.com/in/gregorbaer/
+      icon: linkedin

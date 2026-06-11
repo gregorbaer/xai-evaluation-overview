@@ -132,7 +132,11 @@
       "additionalProperties": false,
       "properties": {
         "label": { "type": "string" },
-        "href": { "type": "string" }
+        "href": { "type": "string" },
+        "icon": {
+          "type": "string",
+          "enum": ["github", "linkedin", "scholar"]
+        }
       }
     },
     "actionLink": {
