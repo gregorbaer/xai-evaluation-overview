@@ -105,7 +105,7 @@ def test_page_uses_research_overview_framing():
 
     assert "Evaluation of Explainable AI for Time Series" in parser.headings
     assert "Class-dependent evaluation effects" in parser.headings
-    assert "Metrics and human understanding" in parser.headings
+    assert "Computational metrics and human understanding" in parser.headings
     assert "Tools for controlled evaluation" in parser.headings
     assert "Research overview" in html
     assert "Conference focus" not in html
