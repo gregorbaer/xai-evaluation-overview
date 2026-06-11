@@ -81,6 +81,15 @@ sections:
           - src: assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png
             alt: Schematic of perturbing the most relevant parts of a time series.
             caption: You can computationally evaluate explanation by replacing input data points in the order of most important features, and seeing how the predictions change.
+          - src: assets/class-dependent-perturbation-effects/fig2_cd_distribution.png
+            alt: Distributions of perturbation metric for different attribution methods, showing class-dependent effects.
+            caption: The distributions of computational evaluation metrics show clear differences per class across different attribution methods.
+          - src: assets/class-dependent-perturbation-effects/fig3_pcoords_cd_constant_perturbations.png
+            alt: Class-stratified analysis of perturbation metrics for different perturbation strategies with different constant perturbations.
+            caption: Perturbing with different constant values leads to different class-dependent effects for the same prediction model and attribution method.
+          - src: assets/class-dependent-perturbation-effects/fig4_pcoords_cd_named_perturbations.png
+            alt: Class-stratified analysis of perturbation metrics for different perturbation strategies with different named perturbations.
+            caption: Perturbing with different perturbation strategies (like Gaussian vs. Uniform noise) also leads to different class-dependent effects for the same prediction model and attribution method.
 
       - slug: why-class-dependent-effects
         classes:
@@ -116,6 +125,12 @@ sections:
           - src: assets/why-class-dependent-effects/fig1_cdpe-why-schematic.png
             alt: Study setup comparing perturbation metrics and ground-truth metrics between classes.
             caption: Study setup comparing perturbation metrics and ground-truth metrics between classes.
+          - src: assets/why-class-dependent-effects/fig2_avg_metrics.png
+            alt: Average perturbation and ground-truth metrics for different datasets, showing class-dependent effects.
+            caption: Comparing the average perturbation and ground-truth metrics for different datasets shows that class-dependent effects can occur in both, but class-dependent effects seem to be reversed.
+          - src: assets/why-class-dependent-effects/fig3_metric_correlations.png
+            alt: Correlation between perturbation and ground-truth metrics for different classes and datasets.
+            caption: Weak correlations and sign reversals between classes across datasets show that ground truth and perturbation-based metrics can disagree about attribution quality.
 
   - id: metrics
     classes:
