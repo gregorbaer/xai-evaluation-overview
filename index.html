@@ -28,7 +28,7 @@
         <div class="hero-copy">
           <p class="eyebrow">Research overview</p>
           <h1>Evaluation of Explainable AI for Time Series</h1>
-          <p class="intro">My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of time series. This page collects various projects that I have worked on in my PhD, including  computational evaluation of explainble AI (XAI) explanations, and more human-centric evaluation.</p>
+          <p class="intro">My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of time series. This page collects various projects that I have worked on in my PhD, including  computational evaluation of explainable AI (XAI) explanations, and more human-centric evaluation.</p>
           <div class="hero-actions" aria-label="Primary links">
             <a class="button primary" href="#papers">View the papers/projects</a>
             <a class="button secondary" href="https://scholar.google.com/citations?hl=en&amp;user=bhR-GboAAAAJ&amp;view_op=list_works&amp;sortby=pubdate">Google Scholar</a>
@@ -51,8 +51,8 @@
           <div class="project-copy">
             <p class="tag">Paper 1</p>
             <h3>Class-dependent perturbation effects in evaluating time-series attributions</h3>
-            <p class="takeaway">Takeaway: perturbation-based metrics depend very much on their parameters, and can look  strong for one class and weak for another, even within the same dataset and model,  without us knowing why that happens.</p>
-            <p>We evaluate time-series attribution methods across datasets, model architectures, and perturbation strategies. The results suggest that class-aware reporting may be needed, because aggregate scores can hide systematic differences between classes.</p>
+            <p class="takeaway">Takeaway: Perturbation-based attribution metrics can behave very differently across classes, even for the same dataset and model. This means strong aggregate scores may reflect class-specific model behavior rather than better attribution quality.</p>
+            <p>The paper evaluates time-series attribution methods across datasets, model architectures, and perturbation strategies. It finds that perturbation metrics can be sensitive for some classes and much less sensitive for others, with the strongest perturbation strategies often showing the largest class differences.</p>
             <p class="citation"><em>Baer, G., Grau, I., Zhang, C., &amp; Van Gorp, P. (2025).  Class-Dependent Perturbation Effects in Evaluating Time Series Attributions.  In R. Guidotti, U. Schmid, &amp; L. Longo (Eds.),  Explainable Artificial Intelligence (pp. 292–314).  Springer Nature Switzerland. https://doi.org/10.1007/978-3-032-08330-2_14</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.1007/978-3-032-08330-2_14">DOI</a>
@@ -64,9 +64,9 @@
               <div class="gallery-frame">
                 <img class="gallery-main-image" src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" alt="Schematic of perturbing the most relevant parts of a time series.">
               </div>
-              <figcaption class="gallery-caption">You can computationally evaluate explanation by replacing input data points in the order of most important features, and seeing how the predictions change.</figcaption>
+              <figcaption class="gallery-caption">You can computationally evaluate explanations by replacing input data points in the order of most important features, and seeing how the predictions change.</figcaption>
               <div class="gallery-thumbs" aria-label="Project figures">
-                <button class="gallery-thumb" type="button" aria-label="Show figure 1" aria-current="true" data-gallery-target="class-dependent-perturbation-effects" data-gallery-src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" data-gallery-alt="Schematic of perturbing the most relevant parts of a time series." data-gallery-caption="You can computationally evaluate explanation by replacing input data points in the order of most important features, and seeing how the predictions change.">
+                <button class="gallery-thumb" type="button" aria-label="Show figure 1" aria-current="true" data-gallery-target="class-dependent-perturbation-effects" data-gallery-src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" data-gallery-alt="Schematic of perturbing the most relevant parts of a time series." data-gallery-caption="You can computationally evaluate explanations by replacing input data points in the order of most important features, and seeing how the predictions change.">
                   <img src="assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png" alt="" aria-hidden="true">
                 </button>
                 <button class="gallery-thumb" type="button" aria-label="Show figure 2" aria-current="false" data-gallery-target="class-dependent-perturbation-effects" data-gallery-src="assets/class-dependent-perturbation-effects/fig2_cd_distribution.png" data-gallery-alt="Distributions of perturbation metric for different attribution methods, showing class-dependent effects." data-gallery-caption="The distributions of computational evaluation metrics show clear differences per class across different attribution methods.">
@@ -87,8 +87,9 @@
           <div class="project-copy">
             <p class="tag">Paper 2</p>
             <h3>Why do class-dependent evaluation effects occur?</h3>
-            <p class="takeaway">Takeaway: class-dependent effects can arise from simple differences in synthetic features, and perturbation scores can disagree with ground-truth metrics.</p>
-            <p>We use controlled synthetic time series where the relevant feature locations are known. This lets us compare perturbation-based degradation scores with ground-truth evaluation and study when the two views of attribution correctness diverge.</p>
+            <p class="takeaway">Takeaway: Class-dependent evaluation effects can come from simple differences between class features, such as amplitude or duration. Additionally, perturbation metrics can disagree with ground-truth metrics,  so you may want to be careful in comparisons.</p>
+            <p>The paper uses synthetic time series with known relevant feature locations to study when class-dependent evaluation effects occur. By varying feature types and class contrasts, it shows that these effects can appear even in simple controlled settings.</p>
+            <p>The results show that perturbation-based degradation scores and ground-truth precision-recall metrics often give different views of attribution quality across classes.</p>
             <p class="citation"><em>Baer, G., Grau, I., Zhang, C., &amp; Van Gorp, P. (2026).  Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions?  A Synthetic Data Investigation.  In I. Koprinska, J. Mendes-Moreira, &amp; P. Branco (Eds.),  Machine Learning and Principles and Practice of Knowledge Discovery in Databases  (pp. 380–395). Springer Nature Switzerland.  https://doi.org/10.1007/978-3-032-19105-2_27</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.1007/978-3-032-19105-2_27">DOI</a>
@@ -120,18 +121,19 @@
       <section class="section section-muted" id="metrics">
         <div class="section-heading">
           <div class="section-title">
-            <p class="eyebrow">Human outcomes</p>
-            <h2>Metrics and human understanding</h2>
+            <p class="eyebrow">Human-centric evaluation</p>
+            <h2>Computational metrics and human understanding</h2>
           </div>
-          <p>A computational score is useful only if we know what it tells us. This project studies how explanation correctness relates to whether people can understand AI decision patterns.</p>
+          <p>A computational evaluation metric is useful only if we know what it tells us. This project studies how computational explanation correctness relates to whether people can understand AI decision patterns.</p>
         </div>
 
         <article class="project project-single">
           <div class="project-copy">
             <p class="tag">User study</p>
             <h3>Does explanation correctness matter?</h3>
-            <p class="takeaway">Takeaway: lower correctness can reduce human understanding, but it may not be a one-to-one mapping, and there strong individual differences.</p>
-            <p>Participants used explanations to predict an AI system's decisions in a time-series task where we manipulated the correctness of the explanations. Correctness of explanations affected participants understanding as measured by their  prediction accuracy, but not at every level.</p>
+            <p class="takeaway">Takeaway: Explanation correctness can affect human understanding, but the relationship is  not necessarily one-to-one. Incorrect explanations can hurt understanding, while correct ones do not guarantee that people learn (and understand) the model's decision pattern.</p>
+            <p>In a user study, participants used explanations to predict an AI system's decisions in a time-series classification task. The study controlled explanation correctness at four levels and found that understanding dropped at 70% and 55% correctness compared with fully correct explanations, but did not keep dropping below 70%.</p>
+            <p>The results suggest that computational XAI metrics should not be treated as direct proxies for human understanding. Correctness can help, but people differ in whether they learn from explanations, and self-reported understanding does not always match actual task performance.</p>
             <p class="citation"><em>Baer, G., Zhang, C., Grau, I., &amp; Van Gorp, P. (2026).  Does Explanation Correctness Matter?  Linking Computational XAI Evaluation to Human Understanding.  https://arxiv.org/abs/2603.25251v1</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.48550/arXiv.2603.25251">DOI</a>
@@ -172,15 +174,16 @@
             <p class="eyebrow">Synthetic data</p>
             <h2>Tools for controlled evaluation</h2>
           </div>
-          <p>xaitimesynth is a small package for synthetic time-series XAI evaluation. It creates datasets with known ground truth so attribution methods can be tested in controlled settings.</p>
+          <p>xaitimesynth is a small Python package for synthetic time-series XAI evaluation. It creates datasets with known feature locations, so attribution methods can be tested in controlled and reproducible settings.</p>
         </div>
 
         <article class="project tool-project">
           <div class="project-copy">
             <p class="tag">Package</p>
             <h3>xaitimesynth: A Python Package for Evaluating Attribution Methods</h3>
-            <p class="takeaway">Takeaway: The package offers a lot of control for more realistic synthetic time series and the evaluation of XAI explanations on that data.</p>
-            <p>The package provides dataset generation tools, examples, and documentation for evaluating feature attributions on synthetic time series. It can be useful when you want a controlled setting before moving to messier real-world data.</p>
+            <p class="takeaway">Takeaway: xaitimesynth makes it easier to evaluate time-series attribution methods with synthetic ground truth, instead of rebuilding custom data generators for each study.</p>
+            <p>The package generates univariate and multivariate time series by combining a background signal with localized, class-discriminating features. It tracks the feature locations as ground-truth masks, which can then be used to test whether attribution methods highlight the right time points.</p>
+            <p>It supports flexible dataset definitions through a fluent Python API with method chaining and YAML configuration files, and includes standard localization metrics such as AUC-PR, AUC-ROC, Relevance Mass Accuracy, and Relevance Rank Accuracy.</p>
             <div class="link-row">
               <a class="button primary" href="https://gregorbaer.github.io/xaitimesynth/">Documentation</a>
               <a class="button secondary" href="https://github.com/gregorbaer/xaitimesynth">GitHub</a>

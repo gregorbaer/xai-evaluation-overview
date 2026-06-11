@@ -29,7 +29,7 @@ hero:
   intro: >-
     My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of
     time series. This page collects various projects that I have worked on in my PhD, including 
-    computational evaluation of explainble AI (XAI) explanations, and more human-centric evaluation.
+    computational evaluation of explainable AI (XAI) explanations, and more human-centric evaluation.
   actions:
     - label: View the papers/projects
       href: "#papers"
@@ -55,15 +55,17 @@ sections:
         tag: Paper 1
         title: Class-dependent perturbation effects in evaluating time-series attributions
         takeaway: >-
-          Takeaway: perturbation-based metrics depend very much on their parameters, and can look 
-          strong for one class and weak for another, even within the same dataset and model, 
-          without us knowing why that happens.
+          Takeaway: Perturbation-based attribution metrics can behave very differently
+          across classes, even for the same dataset and model. This means strong
+          aggregate scores may reflect class-specific model behavior rather than better
+          attribution quality.
         body:
           - >-
-            We evaluate time-series attribution methods across datasets, model
-            architectures, and perturbation strategies. The results suggest that
-            class-aware reporting may be needed, because aggregate scores can hide
-            systematic differences between classes.
+            The paper evaluates time-series attribution methods across datasets, model
+            architectures, and perturbation strategies. It finds that perturbation
+            metrics can be sensitive for some classes and much less sensitive for others,
+            with the strongest perturbation strategies often showing the largest class
+            differences.
         citation: >-
           Baer, G., Grau, I., Zhang, C., & Van Gorp, P. (2025). 
           Class-Dependent Perturbation Effects in Evaluating Time Series Attributions. 
@@ -80,7 +82,7 @@ sections:
         figures:
           - src: assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png
             alt: Schematic of perturbing the most relevant parts of a time series.
-            caption: You can computationally evaluate explanation by replacing input data points in the order of most important features, and seeing how the predictions change.
+            caption: You can computationally evaluate explanations by replacing input data points in the order of most important features, and seeing how the predictions change.
           - src: assets/class-dependent-perturbation-effects/fig2_cd_distribution.png
             alt: Distributions of perturbation metric for different attribution methods, showing class-dependent effects.
             caption: The distributions of computational evaluation metrics show clear differences per class across different attribution methods.
@@ -98,14 +100,20 @@ sections:
         tag: Paper 2
         title: Why do class-dependent evaluation effects occur?
         takeaway: >-
-          Takeaway: class-dependent effects can arise from simple differences in
-          synthetic features, and perturbation scores can disagree with ground-truth metrics.
+          Takeaway: Class-dependent evaluation effects can come from simple differences
+          between class features, such as amplitude or duration. Additionally,
+          perturbation metrics can disagree with ground-truth metrics, 
+          so you may want to be careful in comparisons.
         body:
           - >-
-            We use controlled synthetic time series where the relevant feature
-            locations are known. This lets us compare perturbation-based
-            degradation scores with ground-truth evaluation and study when the
-            two views of attribution correctness diverge.
+            The paper uses synthetic time series with known relevant feature locations to
+            study when class-dependent evaluation effects occur. By varying feature types
+            and class contrasts, it shows that these effects can appear even in simple
+            controlled settings.
+          - >-
+            The results show that perturbation-based degradation scores and
+            ground-truth precision-recall metrics often give different views of
+            attribution quality across classes.
         citation: >-
           Baer, G., Grau, I., Zhang, C., & Van Gorp, P. (2026). 
           Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions? 
@@ -135,11 +143,11 @@ sections:
   - id: metrics
     classes:
       - section-muted
-    eyebrow: Human outcomes
-    title: Metrics and human understanding
+    eyebrow: Human-centric evaluation
+    title: Computational metrics and human understanding
     description: >-
-      A computational score is useful only if we know what it tells us. This
-      project studies how explanation correctness relates to whether people can
+      A computational evaluation metric is useful only if we know what it tells us. This
+      project studies how computational explanation correctness relates to whether people can
       understand AI decision patterns.
     projects:
       - slug: explanation-correctness
@@ -148,14 +156,21 @@ sections:
         tag: User study
         title: Does explanation correctness matter?
         takeaway: >-
-          Takeaway: lower correctness can reduce human understanding, but it may not be a one-to-one mapping,
-          and there strong individual differences.
+          Takeaway: Explanation correctness can affect human understanding, but the relationship is 
+          not necessarily one-to-one. Incorrect explanations can hurt understanding,
+          while correct ones do not guarantee that people learn (and understand) the model's decision pattern.
         body:
           - >-
-            Participants used explanations to predict an AI system's decisions
-            in a time-series task where we manipulated the correctness of the explanations.
-            Correctness of explanations affected participants understanding as measured by their 
-            prediction accuracy, but not at every level.
+            In a user study, participants used explanations to predict an AI system's
+            decisions in a time-series classification task. The study controlled
+            explanation correctness at four levels and found that understanding dropped
+            at 70% and 55% correctness compared with fully correct explanations, but did
+            not keep dropping below 70%.
+          - >-
+            The results suggest that computational XAI metrics should not be treated as
+            direct proxies for human understanding. Correctness can help, but people
+            differ in whether they learn from explanations, and self-reported
+            understanding does not always match actual task performance.
         citation: >-
           Baer, G., Zhang, C., Grau, I., & Van Gorp, P. (2026). 
           Does Explanation Correctness Matter? 
@@ -189,9 +204,9 @@ sections:
     eyebrow: Synthetic data
     title: Tools for controlled evaluation
     description: >-
-      xaitimesynth is a small package for synthetic time-series XAI evaluation.
-      It creates datasets with known ground truth so attribution methods can be
-      tested in controlled settings.
+      xaitimesynth is a small Python package for synthetic time-series XAI evaluation. It
+      creates datasets with known feature locations, so attribution methods can be
+      tested in controlled and reproducible settings.
     projects:
       - slug: xaitimesynth
         figure_display: stack
@@ -200,13 +215,19 @@ sections:
         tag: Package
         title: "xaitimesynth: A Python Package for Evaluating Attribution Methods"
         takeaway: >-
-          Takeaway: The package offers a lot of control for more realistic synthetic time series and the evaluation of XAI explanations on that data.
+          Takeaway: xaitimesynth makes it easier to evaluate time-series attribution
+          methods with synthetic ground truth, instead of rebuilding custom data
+          generators for each study.
         body:
           - >-
-            The package provides dataset generation tools, examples, and
-            documentation for evaluating feature attributions on synthetic time
-            series. It can be useful when you want a controlled setting before
-            moving to messier real-world data.
+            The package generates univariate and multivariate time series by combining a
+            background signal with localized, class-discriminating features. It tracks
+            the feature locations as ground-truth masks, which can then be used to test
+            whether attribution methods highlight the right time points.
+          - >-
+            It supports flexible dataset definitions through a fluent Python API with method chaining
+            and YAML configuration files, and includes standard localization metrics such as
+            AUC-PR, AUC-ROC, Relevance Mass Accuracy, and Relevance Rank Accuracy.
         links:
           - label: Documentation
             href: https://gregorbaer.github.io/xaitimesynth/
