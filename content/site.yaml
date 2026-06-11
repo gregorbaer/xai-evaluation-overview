@@ -171,7 +171,19 @@ sections:
         figures:
           - src: assets/explanation-correctness/fig1_study-design-correctness-understanding.png
             alt: User study design with training, testing, and survey phases.
-            caption: The user study links explanation correctness to participant understanding.
+            caption: The user study links explanation correctness to participant understanding by making participants directly predict the AI's decision based on the explanations (forward simulation).
+          - src: assets/explanation-correctness/fig2_forward_sim_accuracy.png
+            alt: Distribution of forward simulation accuracy for different explanation correctness levels.
+            caption: Forward simulation accuracy (our proxy measure for human understanding) on average decreases with lower explanation correctness, but the effects are not straightforward or always significant (see paper results for more details).
+          - src: assets/explanation-correctness/fig3_learning_curves_ci.png
+            alt: "Learning curves: Cumulative forward simulation accuracy across training trials by correctness condition, averaged over participants."
+            caption: Learning curves show that participants in the 100% correct condition become more accurate over time in training. For the other conditions, learning is slower and stays closer to chance performance.
+          - src: assets/explanation-correctness/fig4_explanation_ratings.png
+            alt: Subjective ratings of explanation quality across correctness conditions.
+            caption: We also measured subjective ratings of explanation quality.
+          - src: assets/explanation-correctness/fig5_corr_ess_avg.png
+            alt: Correlation between explanation quality and understanding.
+            caption: Objective understanding (measured with our proxy of forward simulation accuracy) and subjective ratings of explanation quality do not show a strong correlation, suggesting they may measure different things.
 
   - id: tool
     eyebrow: Synthetic data
