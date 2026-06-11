@@ -15,12 +15,14 @@ brand:
     hidden: true
 
 nav:
-  - label: Papers
+  - label: Computational
     href: "#papers"
-  - label: Metrics
+  - label: Human
     href: "#metrics"
   - label: Tools
     href: "#tool"
+  - label: Scholar
+    href: https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate
 
 hero:
   id: top
@@ -34,13 +36,6 @@ hero:
     src: assets/hero/fig_example_ts_hm.png
     alt: ""
     hidden: true
-  actions:
-    - label: View the papers/projects
-      href: "#papers"
-      style: primary
-    - label: Google Scholar
-      href: https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate
-      style: secondary
 
 sections:
   - id: papers
@@ -80,7 +75,7 @@ sections:
           - label: DOI
             href: https://doi.org/10.1007/978-3-032-08330-2_14
             style: primary
-          - label: Open access
+          - label: arXiv
             href: https://arxiv.org/abs/2502.17022
             style: secondary
         figures:
@@ -130,7 +125,7 @@ sections:
           - label: DOI
             href: https://doi.org/10.1007/978-3-032-19105-2_27
             style: primary
-          - label: Open access
+          - label: arXiv
             href: https://arxiv.org/abs/2506.11790
             style: secondary
         figures:

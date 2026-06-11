@@ -136,7 +136,12 @@ def render_header(content: dict[str, Any]) -> str:
         f'          <a href="{attr(item["href"])}">{text(item["label"])}</a>'
         for item in content["nav"]
     )
-    hero_actions = render_link_row(hero["actions"], "hero-actions", "Primary links", indent=10)
+    hero_actions = render_link_row(
+        hero.get("actions", []),
+        "hero-actions",
+        "Primary links",
+        indent=10,
+    )
     portrait_attrs = {
         "class": "brand-portrait",
         "src": portrait["src"],
@@ -164,7 +169,7 @@ def render_header(content: dict[str, Any]) -> str:
             f"          <h1>{text(hero['title'])}</h1>",
             f'          <p class="intro">{text(hero["intro"])}</p>',
             hero_visual,
-            hero_actions,
+            *([hero_actions] if hero_actions else []),
             "        </div>",
             "      </section>",
             "    </header>",
@@ -304,6 +309,9 @@ def render_link_row(
     """
     spaces = " " * indent
     label_attr = f' aria-label="{attr(aria_label)}"' if aria_label else ""
+    if not links:
+        return ""
+
     lines = [f'{spaces}<div class="{attr(class_name)}"{label_attr}>']
     for link in links:
         style = link.get("style", "secondary")

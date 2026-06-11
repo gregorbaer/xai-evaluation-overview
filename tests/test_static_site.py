@@ -112,28 +112,32 @@ def test_page_uses_research_overview_framing():
     assert "Class-dependent evaluation of time-series explanations" not in parser.headings
 
 
-def test_hero_has_concise_project_actions_and_topbar_portrait():
-    """Check the hero stays focused while the topbar keeps a personal cue."""
+def test_topbar_has_concise_navigation_and_portrait():
+    """Check the topbar carries concise page navigation and a personal cue."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     parser = parse_site()
 
     assert "Paper 1 open version" not in html
     assert "Paper 2 open version" not in html
-    assert "View the papers/projects" in html
+    assert "View the papers/projects" not in html
+    assert 'class="hero-actions"' not in html
+    assert ">Computational</a>" in html
+    assert ">Human</a>" in html
+    assert ">Tools</a>" in html
+    assert ">Scholar</a>" in html
     assert 'class="brand-portrait"' in html
     assert 'class="researcher-portrait"' not in html
     assert any(image.get("src") == "assets/profile-pic-round.png" for image in parser.images)
 
 
 def test_hero_includes_decorative_heatmap_visual():
-    """Check the hero shows a decorative heatmap between intro and actions."""
+    """Check the hero shows a decorative heatmap below the intro."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     parser = parse_site()
     hero_copy = html.split('<div class="hero-copy">', maxsplit=1)[1].split("</div>", maxsplit=1)[0]
 
     assert 'class="hero-visual"' in html
     assert hero_copy.index('class="intro"') < hero_copy.index('class="hero-visual"')
-    assert hero_copy.index('class="hero-visual"') < hero_copy.index('class="hero-actions"')
     assert any(
         image.get("src") == "assets/hero/fig_example_ts_hm.png"
         and image.get("class") == "hero-heatmap"
@@ -313,6 +317,7 @@ def test_images_have_alt_text():
 def test_expected_external_links_are_present():
     """Check the page keeps the main research and tool links easy to find."""
     parser = parse_site()
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
 
     expected_links = {
         "https://doi.org/10.1007/978-3-032-08330-2_14",
@@ -327,6 +332,8 @@ def test_expected_external_links_are_present():
     }
 
     assert expected_links.issubset(set(parser.links))
+    assert "Open access" not in html
+    assert html.count(">arXiv</a>") == 3
 
 
 def test_readme_documents_website_generation_workflow():
