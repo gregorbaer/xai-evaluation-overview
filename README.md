@@ -1,7 +1,6 @@
 # xai-evaluation-overview
 
-This repository contains a generated one-page GitHub Pages site for a curated
-research overview on evaluating explainable AI methods for time-series models.
+This repository contains a generated one-page GitHub Pages site for a research overview of projects conducted during my PhD on evaluating explainable AI methods for time-series models.
 
 The public page is [`index.html`](index.html), with styles in
 [`styles.css`](styles.css), editable content in [`content/site.yaml`](content/site.yaml),
@@ -72,3 +71,9 @@ After deployment, the page should be available at:
 ```text
 https://gregorbaer.github.io/xai-evaluation-overview/
 ```
+
+## License
+
+Code in this repository is licensed under the MIT License. See [`LICENSE`](LICENSE).
+
+Website text, research figures, portraits, logos, and other media assets are not covered by the MIT License unless explicitly stated otherwise. All rights are reserved by their respective owners.

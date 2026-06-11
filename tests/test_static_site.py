@@ -92,7 +92,10 @@ def test_project_citation_is_fully_italicized():
     """Check complete citation strings render in one emphasized block."""
     citation = build_site.render_citation("Author. (2026). Complete citation.")
 
-    assert citation == '            <p class="citation"><em>Author. (2026). Complete citation.</em></p>'
+    assert (
+        citation
+        == '            <p class="citation"><em>Author. (2026). Complete citation.</em></p>'
+    )
 
 
 def test_page_uses_research_overview_framing():
@@ -133,7 +136,7 @@ def test_generator_supports_thumbnail_galleries_for_future_projects():
     )
 
     assert 'class="project-gallery"' in gallery
-    assert 'data-gallery-target=' in gallery
+    assert "data-gallery-target=" in gallery
     assert 'class="gallery-caption"' in gallery
     assert gallery.count('class="gallery-thumb"') == 2
 
@@ -148,7 +151,11 @@ def test_empty_gallery_captions_do_not_reserve_space():
         "mixed-caption-project",
         [
             {"src": "assets/mixed-caption-project/fig1.png", "alt": "First figure.", "caption": ""},
-            {"src": "assets/mixed-caption-project/fig2.png", "alt": "Second figure.", "caption": "Two."},
+            {
+                "src": "assets/mixed-caption-project/fig2.png",
+                "alt": "Second figure.",
+                "caption": "Two.",
+            },
         ],
     )
 
@@ -183,7 +190,9 @@ def test_project_figure_surfaces_are_neutral():
     """Check figure frames avoid tinted backgrounds that compete with plots."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     gallery_frame_rule = css.split(".gallery-frame {", maxsplit=1)[1].split("}", maxsplit=1)[0]
-    figure_stack_rule = css.split(".project-figure-stack {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    figure_stack_rule = css.split(".project-figure-stack {", maxsplit=1)[1].split("}", maxsplit=1)[
+        0
+    ]
 
     assert "background: var(--surface)" in gallery_frame_rule
     assert "background: var(--surface)" in figure_stack_rule
