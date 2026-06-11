@@ -65,11 +65,7 @@ sections:
             It finds that perturbation metrics can be sensitive for some classes and much less sensitive for others,
             with the strongest perturbation strategies often showing the largest class differences.
         citation: >-
-          Baer, G., Grau, I., Zhang, C., & Van Gorp, P. (2025). 
-          Class-Dependent Perturbation Effects in Evaluating Time Series Attributions. 
-          In R. Guidotti, U. Schmid, & L. Longo (Eds.), 
-          Explainable Artificial Intelligence (pp. 292–314). 
-          Springer Nature Switzerland. https://doi.org/10.1007/978-3-032-08330-2_14
+          Baer, G., Grau, I., Zhang, C., Van Gorp, P. (2025). Class-Dependent Perturbation Effects in Evaluating Time Series Attributions. In: Guidotti, R., Schmid, U., Longo, L. (eds) Explainable Artificial Intelligence. xAI 2025. Communications in Computer and Information Science, vol 2579. Springer, Cham. https://doi.org/10.1007/978-3-032-08330-2_14
         links:
           - label: DOI
             href: https://doi.org/10.1007/978-3-032-08330-2_14
@@ -113,13 +109,7 @@ sections:
             ground-truth-based metrics often provide different views of
             attribution quality across classes.
         citation: >-
-          Baer, G., Grau, I., Zhang, C., & Van Gorp, P. (2026). 
-          Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions? 
-          A Synthetic Data Investigation. 
-          In I. Koprinska, J. Mendes-Moreira, & P. Branco (Eds.), 
-          Machine Learning and Principles and Practice of Knowledge Discovery in Databases 
-          (pp. 380–395). Springer Nature Switzerland. 
-          https://doi.org/10.1007/978-3-032-19105-2_27
+          Baer, G., Grau, I., Zhang, C., Van Gorp, P. (2026). Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions? A Synthetic Data Investigation. In: Koprinska, I., Mendes-Moreira, J., Branco, P. (eds) Machine Learning and Principles and Practice of Knowledge Discovery in Databases. ECML PKDD 2025. Communications in Computer and Information Science, vol 2842. Springer, Cham. https://doi.org/10.1007/978-3-032-19105-2_27
         links:
           - label: DOI
             href: https://doi.org/10.1007/978-3-032-19105-2_27
