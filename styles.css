@@ -118,10 +118,6 @@ main,
   fill: currentColor;
 }
 
-.footer-icon[fill="none"] {
-  fill: none;
-}
-
 .hero {
   min-height: clamp(420px, 58svh, 560px);
   padding: 30px 0 38px;

@@ -318,9 +318,27 @@ def test_footer_links_include_icons_and_visible_labels():
 
     assert footer_links.count('class="footer-icon"') == 3
     assert footer_links.count('aria-hidden="true"') >= 3
+    assert footer_links.count('width="18"') == 3
+    assert footer_links.count('height="18"') == 3
     assert '<span class="footer-link-label">Google Scholar</span>' in footer_links
     assert '<span class="footer-link-label">GitHub</span>' in footer_links
     assert '<span class="footer-link-label">LinkedIn</span>' in footer_links
+
+
+def test_footer_icons_are_normalized_from_local_svg_assets():
+    """Check footer icons come from local SVG assets and inherit text color."""
+    assert set(build_site.FOOTER_ICON_PATHS) == {"github", "linkedin", "scholar"}
+    for icon_path in build_site.FOOTER_ICON_PATHS.values():
+        assert icon_path.exists()
+
+        icon = build_site.normalize_footer_icon(icon_path)
+
+        assert 'class="footer-icon"' in icon
+        assert 'width="18"' in icon
+        assert 'height="18"' in icon
+        assert 'aria-hidden="true"' in icon
+        assert 'fill="currentColor"' in icon
+        assert "#000000" not in icon
 
 
 def test_expected_sections_exist():
