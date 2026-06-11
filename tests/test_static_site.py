@@ -203,6 +203,34 @@ def test_section_overviews_are_full_width_stacked_blocks():
     assert "grid-template-columns" not in section_heading_rule
 
 
+def test_section_backgrounds_stay_neutral_while_project_borders_keep_color():
+    """Check section bands are neutral and project cards keep color accents."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    section_muted_rule = css.split(".section-muted {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+
+    assert "background: var(--section-muted)" in section_muted_rule
+    assert "var(--yellow-soft)" not in section_muted_rule
+    assert "var(--green-soft)" not in section_muted_rule
+    assert ".project-featured:first-of-type" in css
+    assert ".project-featured:nth-of-type(2)" in css
+    assert ".project-single" in css
+    assert ".tool-project" in css
+
+
+def test_section_background_alternation_starts_after_hero():
+    """Check generated section backgrounds alternate from the first section."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+
+    assert '<section class="section section-lead section-muted" id="papers">' in html
+    assert '<section class="section" id="metrics">' in html
+    assert '<section class="section section-muted" id="tool">' in html
+    assert all(
+        "section-muted" not in section.get("classes", [])
+        for section in content["sections"]
+    )
+
+
 def test_project_figure_surfaces_are_neutral():
     """Check figure frames avoid tinted backgrounds that compete with plots."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")

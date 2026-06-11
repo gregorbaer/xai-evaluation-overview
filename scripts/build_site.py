@@ -108,7 +108,7 @@ def render_site(content: dict[str, Any]) -> str:
         render_header(content),
         "",
         "    <main>",
-        *[render_section(section) for section in content["sections"]],
+        *[render_section(section, index) for index, section in enumerate(content["sections"])],
         "    </main>",
         "",
         render_footer(content["footer"]),
@@ -199,16 +199,19 @@ def render_hero_visual(visual: dict[str, Any] | None) -> str:
     )
 
 
-def render_section(section: dict[str, Any]) -> str:
+def render_section(section: dict[str, Any], index: int) -> str:
     """Render a content section and its projects.
 
     Args:
         section: Section content.
+        index: Zero-based section index after the hero.
 
     Returns:
         Section HTML.
     """
     section_classes = ["section", *section.get("classes", [])]
+    if index % 2 == 0:
+        section_classes.append("section-muted")
     project_blocks = [render_project(project) for project in section["projects"]]
     return "\n".join(
         [

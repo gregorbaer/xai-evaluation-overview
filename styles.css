@@ -4,6 +4,7 @@
   --muted: #5d6673;
   --paper: #fbfaf7;
   --surface: #ffffff;
+  --section-muted: #f3f5f6;
   --line: #dde3e9;
   --blue-soft: #d8ebf4;
   --blue: #126b91;
@@ -246,7 +247,7 @@ h3 {
   margin-left: calc(50% - 50vw);
   padding-right: max(16px, calc((100vw - var(--max-width)) / 2));
   padding-left: max(16px, calc((100vw - var(--max-width)) / 2));
-  background: linear-gradient(180deg, rgba(255, 243, 215, 0.72), rgba(223, 238, 229, 0.5));
+  background: var(--section-muted);
 }
 
 .section-heading {

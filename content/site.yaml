@@ -145,8 +145,6 @@ sections:
             caption: Weak correlations and sign reversals between classes across datasets show that ground truth and perturbation-based metrics can disagree about attribution quality.
 
   - id: metrics
-    classes:
-      - section-muted
     eyebrow: Human-centric evaluation
     title: Computational metrics and human understanding
     description: >-
