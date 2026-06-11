@@ -1,9 +1,14 @@
 from html.parser import HTMLParser
 from pathlib import Path
+import subprocess
+import sys
 from urllib.parse import urlparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import build_site  # noqa: E402
 
 
 class SiteParser(HTMLParser):
@@ -16,6 +21,7 @@ class SiteParser(HTMLParser):
         self.links = []
         self.images = []
         self.headings = []
+        self.buttons = []
         self._current_heading = None
 
     def handle_starttag(self, tag, attrs):
@@ -27,6 +33,8 @@ class SiteParser(HTMLParser):
             self.links.append(attributes.get("href", ""))
         if tag == "img":
             self.images.append(attributes)
+        if tag == "button":
+            self.buttons.append(attributes)
         if tag in {"h1", "h2", "h3"}:
             self._current_heading = []
 
@@ -47,6 +55,44 @@ def parse_site():
     parser = SiteParser()
     parser.feed((ROOT / "index.html").read_text(encoding="utf-8"))
     return parser
+
+
+def test_committed_site_is_generated_from_yaml_source():
+    """Check the committed HTML matches the editable YAML content source."""
+    assert (ROOT / "content" / "site.yaml").exists()
+    assert (ROOT / "scripts" / "build_site.py").exists()
+
+    result = subprocess.run(
+        ["uv", "run", "python", "scripts/build_site.py", "--check"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr or result.stdout
+
+
+def test_project_citations_are_single_editable_strings():
+    """Check citations can be edited as complete formatted strings."""
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+
+    citations = [
+        project.get("citation")
+        for section in content["sections"]
+        for project in section["projects"]
+        if project.get("citation")
+    ]
+
+    assert citations
+    assert all(isinstance(citation, str) for citation in citations)
+
+
+def test_project_citation_is_fully_italicized():
+    """Check complete citation strings render in one emphasized block."""
+    citation = build_site.render_citation("Author. (2026). Complete citation.")
+
+    assert citation == '            <p class="citation"><em>Author. (2026). Complete citation.</em></p>'
 
 
 def test_page_uses_research_overview_framing():
@@ -76,6 +122,54 @@ def test_hero_has_concise_project_actions_and_topbar_portrait():
     assert any(image.get("src") == "assets/profile-pic-round.png" for image in parser.images)
 
 
+def test_generator_supports_thumbnail_galleries_for_future_projects():
+    """Check multi-figure gallery rendering stays available for future projects."""
+    gallery = build_site.render_gallery(
+        "future-project",
+        [
+            {"src": "assets/future-project/fig1.png", "alt": "First figure.", "caption": "One."},
+            {"src": "assets/future-project/fig2.png", "alt": "Second figure.", "caption": "Two."},
+        ],
+    )
+
+    assert 'class="project-gallery"' in gallery
+    assert 'data-gallery-target=' in gallery
+    assert 'class="gallery-caption"' in gallery
+    assert gallery.count('class="gallery-thumb"') == 2
+
+
+def test_empty_gallery_captions_do_not_reserve_space():
+    """Check empty captions can be omitted or hidden in generated galleries."""
+    no_captions = build_site.render_gallery(
+        "captionless-project",
+        [{"src": "assets/captionless-project/fig1.png", "alt": "Captionless figure."}],
+    )
+    mixed_captions = build_site.render_gallery(
+        "mixed-caption-project",
+        [
+            {"src": "assets/mixed-caption-project/fig1.png", "alt": "First figure.", "caption": ""},
+            {"src": "assets/mixed-caption-project/fig2.png", "alt": "Second figure.", "caption": "Two."},
+        ],
+    )
+
+    assert 'class="gallery-caption"' not in no_captions
+    assert 'class="gallery-caption" hidden' in mixed_captions
+
+
+def test_xaitimesynth_keeps_logo_and_example_visible_together():
+    """Check the tool card keeps both original visuals visible at once."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    tool_html = html.split('data-figure-stack-id="xaitimesynth"', maxsplit=1)[1].split(
+        "</figure>",
+        maxsplit=1,
+    )[0]
+
+    assert 'class="project-figure-stack"' in html
+    assert "xaitimesynth_logo.svg" in tool_html
+    assert "quickstart_dataset.png" in tool_html
+    assert 'class="gallery-thumb"' not in tool_html
+
+
 def test_section_overviews_are_full_width_stacked_blocks():
     """Check section intros stack title and description at project-card width."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
@@ -83,6 +177,19 @@ def test_section_overviews_are_full_width_stacked_blocks():
 
     assert "width: 100%" in section_heading_rule
     assert "grid-template-columns" not in section_heading_rule
+
+
+def test_project_figure_surfaces_are_neutral():
+    """Check figure frames avoid tinted backgrounds that compete with plots."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    gallery_frame_rule = css.split(".gallery-frame {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    figure_stack_rule = css.split(".project-figure-stack {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+
+    assert "background: var(--surface)" in gallery_frame_rule
+    assert "background: var(--surface)" in figure_stack_rule
+    assert "linear-gradient" not in gallery_frame_rule
+    assert "linear-gradient" not in figure_stack_rule
+    assert "var(--green-soft)" not in figure_stack_rule
 
 
 def test_footer_includes_subtle_ai_disclaimer():
@@ -112,6 +219,21 @@ def test_local_assets_referenced_by_page_exist():
     assert local_paths
     for relative_path in local_paths:
         assert (ROOT / relative_path).exists(), relative_path
+
+
+def test_local_figures_are_grouped_by_project_folder():
+    """Check local project figures use extendable per-project asset folders."""
+    parser = parse_site()
+    local_project_figures = [
+        image["src"]
+        for image in parser.images
+        if image.get("src", "").startswith("assets/")
+        and image.get("src") != "assets/profile-pic-round.png"
+    ]
+
+    assert local_project_figures
+    for relative_path in local_project_figures:
+        assert len(Path(relative_path).parts) >= 3, relative_path
 
 
 def test_internal_anchor_links_point_to_real_sections():
@@ -151,3 +273,15 @@ def test_expected_external_links_are_present():
     }
 
     assert expected_links.issubset(set(parser.links))
+
+
+def test_readme_documents_website_generation_workflow():
+    """Check README explains how to edit, regenerate, test, and deploy."""
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    assert "## Website Generation" in readme
+    assert "content/site.yaml" in readme
+    assert "assets/<project-slug>/" in readme
+    assert "uv run python scripts/build_site.py" in readme
+    assert "uv run pytest -q" in readme
+    assert "No server-side build step is required on GitHub Pages." in readme

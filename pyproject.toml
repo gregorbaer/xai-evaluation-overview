@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Static GitHub Pages research overview for time-series XAI evaluation."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pyyaml>=6.0.3",
+]
 
 [dependency-groups]
 dev = [

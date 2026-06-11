@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XAI Evaluation Overview Site Content",
+  "type": "object",
+  "required": ["site", "brand", "nav", "hero", "sections", "footer"],
+  "additionalProperties": false,
+  "properties": {
+    "site": {
+      "type": "object",
+      "required": ["language", "title", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "language": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": ["name", "href", "portrait"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "href": { "type": "string" },
+        "portrait": { "$ref": "#/$defs/image" }
+      }
+    },
+    "nav": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/link" }
+    },
+    "hero": {
+      "type": "object",
+      "required": ["id", "eyebrow", "title", "intro", "actions"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "eyebrow": { "type": "string" },
+        "title": { "type": "string" },
+        "intro": { "type": "string" },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/actionLink" }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "footer": {
+      "type": "object",
+      "required": ["text", "disclaimer", "links"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "disclaimer": { "type": "string" },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/link" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": ["id", "eyebrow", "title", "description", "projects"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "classes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "eyebrow": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "projects": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/project" }
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "required": ["slug", "classes", "tag", "title", "takeaway", "body", "links", "figures"],
+      "additionalProperties": false,
+      "properties": {
+        "slug": { "type": "string" },
+        "figure_display": {
+          "type": "string",
+          "enum": ["stack"]
+        },
+        "classes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tag": { "type": "string" },
+        "title": { "type": "string" },
+        "takeaway": { "type": "string" },
+        "body": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "citation": { "type": "string" },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/actionLink" }
+        },
+        "figures": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/image" }
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "required": ["src", "alt"],
+      "additionalProperties": false,
+      "properties": {
+        "src": { "type": "string" },
+        "alt": { "type": "string" },
+        "hidden": { "type": "boolean" },
+        "caption": { "type": "string" }
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": ["label", "href"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string" },
+        "href": { "type": "string" }
+      }
+    },
+    "actionLink": {
+      "type": "object",
+      "required": ["label", "href"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "type": "string" },
+        "href": { "type": "string" },
+        "style": {
+          "type": "string",
+          "enum": ["primary", "secondary"]
+        }
+      }
+    }
+  }
+}

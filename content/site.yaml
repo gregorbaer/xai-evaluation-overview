@@ -1,0 +1,205 @@
+site:
+  language: en
+  title: Evaluation of Explainable AI for Time Series
+  description: >-
+    A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD.
+    Includes work on evaluating explainable AI methods fortime-series models, including perturbation metrics, ground-truth evaluation,
+    human understanding, and xaitimesynth.
+
+brand:
+  name: Gregor Baer
+  href: "#top"
+  portrait:
+    src: assets/profile-pic-round.png
+    alt: ""
+    hidden: true
+
+nav:
+  - label: Papers
+    href: "#papers"
+  - label: Metrics
+    href: "#metrics"
+  - label: Tools
+    href: "#tool"
+
+hero:
+  id: top
+  eyebrow: Research overview
+  title: Evaluation of Explainable AI for Time Series
+  intro: >-
+    My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of
+    time series. This page collects various projects that I have worked on in my PhD, including 
+    computational evaluation of explainble AI (XAI) explanations, and more human-centric evaluation.
+  actions:
+    - label: View the papers/projects
+      href: "#papers"
+      style: primary
+    - label: Google Scholar
+      href: https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate
+      style: secondary
+
+sections:
+  - id: papers
+    classes:
+      - section-lead
+    eyebrow: Perturbation metrics
+    title: Class-dependent evaluation effects
+    description: >-
+      Perturbation analysis is often used to evaluate whether feature
+      attributions are correct. In the below projects, we studied when that evaluation depends
+      on the predicted class, and what that means for trusting the perturbation metrics.
+    projects:
+      - slug: class-dependent-perturbation-effects
+        classes:
+          - project-featured
+        tag: Paper 1
+        title: Class-dependent perturbation effects in evaluating time-series attributions
+        takeaway: >-
+          Takeaway: perturbation-based metrics depend very much on their parameters, and can look 
+          strong for one class and weak for another, even within the same dataset and model, 
+          without us knowing why that happens.
+        body:
+          - >-
+            We evaluate time-series attribution methods across datasets, model
+            architectures, and perturbation strategies. The results suggest that
+            class-aware reporting may be needed, because aggregate scores can hide
+            systematic differences between classes.
+        citation: >-
+          Baer, G., Grau, I., Zhang, C., & Van Gorp, P. (2025). 
+          Class-Dependent Perturbation Effects in Evaluating Time Series Attributions. 
+          In R. Guidotti, U. Schmid, & L. Longo (Eds.), 
+          Explainable Artificial Intelligence (pp. 292–314). 
+          Springer Nature Switzerland. https://doi.org/10.1007/978-3-032-08330-2_14
+        links:
+          - label: DOI
+            href: https://doi.org/10.1007/978-3-032-08330-2_14
+            style: primary
+          - label: Open access
+            href: https://arxiv.org/abs/2502.17022
+            style: secondary
+        figures:
+          - src: assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png
+            alt: Schematic of perturbing the most relevant parts of a time series.
+            caption: You can computationally evaluate explanation by replacing input data points in the order of most important features, and seeing how the predictions change.
+
+      - slug: why-class-dependent-effects
+        classes:
+          - project-featured
+          - project-reverse
+        tag: Paper 2
+        title: Why do class-dependent evaluation effects occur?
+        takeaway: >-
+          Takeaway: class-dependent effects can arise from simple differences in
+          synthetic features, and perturbation scores can disagree with ground-truth metrics.
+        body:
+          - >-
+            We use controlled synthetic time series where the relevant feature
+            locations are known. This lets us compare perturbation-based
+            degradation scores with ground-truth evaluation and study when the
+            two views of attribution correctness diverge.
+        citation: >-
+          Baer, G., Grau, I., Zhang, C., & Van Gorp, P. (2026). 
+          Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions? 
+          A Synthetic Data Investigation. 
+          In I. Koprinska, J. Mendes-Moreira, & P. Branco (Eds.), 
+          Machine Learning and Principles and Practice of Knowledge Discovery in Databases 
+          (pp. 380–395). Springer Nature Switzerland. 
+          https://doi.org/10.1007/978-3-032-19105-2_27
+        links:
+          - label: DOI
+            href: https://doi.org/10.1007/978-3-032-19105-2_27
+            style: primary
+          - label: Open access
+            href: https://arxiv.org/abs/2506.11790
+            style: secondary
+        figures:
+          - src: assets/why-class-dependent-effects/fig1_cdpe-why-schematic.png
+            alt: Study setup comparing perturbation metrics and ground-truth metrics between classes.
+            caption: Study setup comparing perturbation metrics and ground-truth metrics between classes.
+
+  - id: metrics
+    classes:
+      - section-muted
+    eyebrow: Human outcomes
+    title: Metrics and human understanding
+    description: >-
+      A computational score is useful only if we know what it tells us. This
+      project studies how explanation correctness relates to whether people can
+      understand AI decision patterns.
+    projects:
+      - slug: explanation-correctness
+        classes:
+          - project-single
+        tag: User study
+        title: Does explanation correctness matter?
+        takeaway: >-
+          Takeaway: lower correctness can reduce human understanding, but it may not be a one-to-one mapping,
+          and there strong individual differences.
+        body:
+          - >-
+            Participants used explanations to predict an AI system's decisions
+            in a time-series task where we manipulated the correctness of the explanations.
+            Correctness of explanations affected participants understanding as measured by their 
+            prediction accuracy, but not at every level.
+        citation: >-
+          Baer, G., Zhang, C., Grau, I., & Van Gorp, P. (2026). 
+          Does Explanation Correctness Matter? 
+          Linking Computational XAI Evaluation to Human Understanding. 
+          https://arxiv.org/abs/2603.25251v1
+        links:
+          - label: DOI
+            href: https://doi.org/10.48550/arXiv.2603.25251
+            style: primary
+          - label: arXiv
+            href: https://arxiv.org/abs/2603.25251
+            style: secondary
+        figures:
+          - src: assets/explanation-correctness/fig1_study-design-correctness-understanding.png
+            alt: User study design with training, testing, and survey phases.
+            caption: The user study links explanation correctness to participant understanding.
+
+  - id: tool
+    eyebrow: Synthetic data
+    title: Tools for controlled evaluation
+    description: >-
+      xaitimesynth is a small package for synthetic time-series XAI evaluation.
+      It creates datasets with known ground truth so attribution methods can be
+      tested in controlled settings.
+    projects:
+      - slug: xaitimesynth
+        figure_display: stack
+        classes:
+          - tool-project
+        tag: Package
+        title: "xaitimesynth: A Python Package for Evaluating Attribution Methods"
+        takeaway: >-
+          Takeaway: The package offers a lot of control for more realistic synthetic time series and the evaluation of XAI explanations on that data.
+        body:
+          - >-
+            The package provides dataset generation tools, examples, and
+            documentation for evaluating feature attributions on synthetic time
+            series. It can be useful when you want a controlled setting before
+            moving to messier real-world data.
+        links:
+          - label: Documentation
+            href: https://gregorbaer.github.io/xaitimesynth/
+            style: primary
+          - label: GitHub
+            href: https://github.com/gregorbaer/xaitimesynth
+            style: secondary
+        figures:
+          - src: https://raw.githubusercontent.com/gregorbaer/xaitimesynth/main/docs/assets/logo/xaitimesynth_logo.svg
+            alt: xaitimesynth logo
+            caption: The xaitimesynth package provides controlled synthetic data for time-series XAI evaluation.
+          - src: https://raw.githubusercontent.com/gregorbaer/xaitimesynth/main/docs/assets/images/quickstart_dataset.png
+            alt: Example synthetic time-series dataset generated with xaitimesynth.
+            caption: Example time series generated with the package quickstart.
+
+footer:
+  text: Gregor Baer, PhD Candidate in explainable AI, at Eindhoven University of Technology.
+  disclaimer: This website was generated with the help of AI coding tools.
+  links:
+    - label: Google Scholar
+      href: https://scholar.google.com/citations?hl=en&user=bhR-GboAAAAJ&view_op=list_works&sortby=pubdate
+    - label: GitHub
+      href: https://github.com/gregorbaer
