@@ -30,6 +30,10 @@ hero:
     My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of
     time series. This page collects various projects that I have worked on in my PhD, including 
     computational evaluation of explainable AI (XAI) explanations, and more human-centric evaluation.
+  visual:
+    src: assets/hero/fig_example_ts_hm.png
+    alt: ""
+    hidden: true
   actions:
     - label: View the papers/projects
       href: "#papers"

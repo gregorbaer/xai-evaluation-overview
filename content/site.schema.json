@@ -38,6 +38,7 @@
         "eyebrow": { "type": "string" },
         "title": { "type": "string" },
         "intro": { "type": "string" },
+        "visual": { "$ref": "#/$defs/image" },
         "actions": {
           "type": "array",
           "items": { "$ref": "#/$defs/actionLink" }

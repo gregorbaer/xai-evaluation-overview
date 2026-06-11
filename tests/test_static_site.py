@@ -125,6 +125,23 @@ def test_hero_has_concise_project_actions_and_topbar_portrait():
     assert any(image.get("src") == "assets/profile-pic-round.png" for image in parser.images)
 
 
+def test_hero_includes_decorative_heatmap_visual():
+    """Check the hero shows a decorative heatmap between intro and actions."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    parser = parse_site()
+    hero_copy = html.split('<div class="hero-copy">', maxsplit=1)[1].split("</div>", maxsplit=1)[0]
+
+    assert 'class="hero-visual"' in html
+    assert hero_copy.index('class="intro"') < hero_copy.index('class="hero-visual"')
+    assert hero_copy.index('class="hero-visual"') < hero_copy.index('class="hero-actions"')
+    assert any(
+        image.get("src") == "assets/hero/fig_example_ts_hm.png"
+        and image.get("class") == "hero-heatmap"
+        and image.get("aria-hidden") == "true"
+        for image in parser.images
+    )
+
+
 def test_generator_supports_thumbnail_galleries_for_future_projects():
     """Check multi-figure gallery rendering stays available for future projects."""
     gallery = build_site.render_gallery(

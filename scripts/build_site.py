@@ -143,6 +143,7 @@ def render_header(content: dict[str, Any]) -> str:
         "alt": portrait.get("alt", ""),
         "aria-hidden": "true" if portrait.get("hidden") else None,
     }
+    hero_visual = render_hero_visual(hero.get("visual"))
 
     return "\n".join(
         [
@@ -162,10 +163,38 @@ def render_header(content: dict[str, Any]) -> str:
             f'          <p class="eyebrow">{text(hero["eyebrow"])}</p>',
             f"          <h1>{text(hero['title'])}</h1>",
             f'          <p class="intro">{text(hero["intro"])}</p>',
+            hero_visual,
             hero_actions,
             "        </div>",
             "      </section>",
             "    </header>",
+        ]
+    )
+
+
+def render_hero_visual(visual: dict[str, Any] | None) -> str:
+    """Render an optional decorative hero image.
+
+    Args:
+        visual: Image metadata, or None when the hero has no visual.
+
+    Returns:
+        Hero visual HTML or an empty string.
+    """
+    if not visual:
+        return ""
+
+    image_attrs = {
+        "class": "hero-heatmap",
+        "src": visual["src"],
+        "alt": visual.get("alt", ""),
+        "aria-hidden": "true" if visual.get("hidden") else None,
+    }
+    return "\n".join(
+        [
+            '          <figure class="hero-visual">',
+            f"            <img{render_attrs(image_attrs)}>",
+            "          </figure>",
         ]
     )
 
