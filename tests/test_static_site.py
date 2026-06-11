@@ -222,6 +222,35 @@ def test_section_backgrounds_stay_neutral_while_project_borders_keep_color():
     assert ".tool-project" in css
 
 
+def test_section_bands_use_the_same_page_gutter_as_other_content():
+    """Check full-width section bands keep content aligned with the page gutter."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    root_rule = css.split(":root {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    page_shell_rule = css.split(".site-header,", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    section_muted_rule = css.split(".section-muted {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    mobile_rule = css.split("@media (max-width: 640px) {", maxsplit=1)[1]
+
+    assert "--page-gutter: 16px" in root_rule
+    assert "100% - var(--page-gutter) - var(--page-gutter)" in page_shell_rule
+    assert "padding-right: max(var(--page-gutter)" in section_muted_rule
+    assert "padding-left: max(var(--page-gutter)" in section_muted_rule
+    assert "100% - 24px" not in mobile_rule
+
+
+def test_mobile_section_headings_align_with_project_card_text():
+    """Check mobile section intros keep the same readable inset as card content."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    mobile_rule = css.split("@media (max-width: 640px) {", maxsplit=1)[1]
+    project_rule = mobile_rule.split(".project {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    section_heading_rule = mobile_rule.split(".section-heading {", maxsplit=1)[1].split(
+        "}",
+        maxsplit=1,
+    )[0]
+
+    assert "padding: 18px" in project_rule
+    assert "padding-inline: 18px" in section_heading_rule
+
+
 def test_section_background_alternation_starts_after_hero():
     """Check generated section backgrounds alternate from the first section."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")

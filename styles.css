@@ -16,6 +16,7 @@
   --green-soft: #dfeee5;
   --shadow: 0 18px 50px rgba(24, 32, 42, 0.08);
   --radius: 8px;
+  --page-gutter: 16px;
   --max-width: 1200px;
 }
 
@@ -51,7 +52,7 @@ a {
 .site-header,
 main,
 .site-footer {
-  width: min(100% - 32px, var(--max-width));
+  width: min(calc(100% - var(--page-gutter) - var(--page-gutter)), var(--max-width));
   margin: 0 auto;
 }
 
@@ -247,8 +248,8 @@ h3 {
 .section-muted {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  padding-right: max(16px, calc((100vw - var(--max-width)) / 2));
-  padding-left: max(16px, calc((100vw - var(--max-width)) / 2));
+  padding-right: max(var(--page-gutter), calc((100vw - var(--max-width)) / 2));
+  padding-left: max(var(--page-gutter), calc((100vw - var(--max-width)) / 2));
   background: var(--section-muted);
 }
 
@@ -447,12 +448,6 @@ h3 {
 }
 
 @media (max-width: 640px) {
-  .site-header,
-  main,
-  .site-footer {
-    width: min(100% - 24px, var(--max-width));
-  }
-
   .topbar {
     align-items: flex-start;
     flex-direction: column;
@@ -490,6 +485,10 @@ h3 {
 
   .section-lead {
     padding-top: 28px;
+  }
+
+  .section-heading {
+    padding-inline: 18px;
   }
 
   .project {
