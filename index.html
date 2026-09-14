@@ -6,7 +6,7 @@
     <title>Evaluation of Explainable AI for Time Series</title>
     <meta
       name="description"
-      content="A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD. Contains work on evaluating explainable AI methods for time-series models, including perturbation metrics, ground-truth evaluation, human understanding, and xaitimesynth."
+      content="A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD. Contains work on evaluating explainable AI methods, including perturbation metrics, ground-truth-based evaluation, and human understanding."
     >
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -28,7 +28,7 @@
         <div class="hero-copy">
           <p class="eyebrow">Research overview</p>
           <h1>Evaluation of Explainable AI for Time Series</h1>
-          <p class="intro">My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of time series. This page collects various projects that I have worked on in my PhD, including  computational evaluation of explainable AI (XAI) explanations, and more human-centric evaluation.</p>
+          <p class="intro">My PhD research focuses on the evaluation of explainable AI (XAI) methods. I am interested in how we can reliably assess the (computaional) correctness of explanations, and how that may (or may not) relate to human outcomes such as understanding.</p>
           <figure class="hero-visual">
             <img class="hero-heatmap" src="assets/hero/fig_example_ts_hm.png" alt="" aria-hidden="true">
           </figure>
@@ -43,15 +43,15 @@
             <p class="eyebrow">Perturbation metrics</p>
             <h2>Class-dependent evaluation effects</h2>
           </div>
-          <p>Perturbation analysis is often used to evaluate how "correct" explanations are.  In the below projects, we studied when that evaluation depends on the predicted class,  and what that means for trusting the perturbation metrics. Here, we applied evaluation metrics to feature attribution explanations,  which compute importance scores to input features (time points) for a specific prediction.</p>
+          <p>Perturbation analysis is often used to evaluate how "correct" explanations are.  It's also unclear, however, how reliable perturbation metrics are as the results can depend a  lot on how you perturb the data. In the below projects, we studied how sensitive perturbation metrics can be to dataset-specific characteristics like class membership, which can drive biased evaluation results.</p>
         </div>
 
         <article class="project project-featured">
           <div class="project-copy">
             <p class="tag">Paper 1</p>
             <h3>Class-dependent perturbation effects in evaluating time-series attributions</h3>
-            <p class="takeaway">Takeaway: Perturbation-based evaluation metrics can behave very differently across classes, even for the same dataset and model. This implies strong aggregate scores can reflect class-specific model behavior rather than better attribution quality.</p>
-            <p>The paper evaluates feature attribution explanation methods across datasets, model architectures, and perturbation strategies in the context of time series classification.  It finds that perturbation metrics can be sensitive for some classes and much less sensitive for others, with the strongest perturbation strategies often showing the largest class differences.</p>
+            <p class="takeaway">Takeaway: Perturbation-based evaluation metrics can behave very differently across classes, even for the same dataset and model. Without checking for class-dependence, good average evaluation scores may be driven by good performance for one class.</p>
+            <p>We evaluate feature attribution methods across datasets, model architectures, and perturbation strategies in the context of time series classification.  We find that perturbation metrics can be sensitive for some classes and much less sensitive for others, with the strongest perturbation strategies often showing the largest class differences. This is somewhat troubling, as we don't know a priori what "good" perturbations are, or which classes are most sensitive to perturbation. Moreover, we don't know necessarily know whether the explanations are "bad" for the insensitive classes, or whether the  evaluation approach may not be appropriate.</p>
             <p class="citation"><em>Baer, G., Grau, I., Zhang, C., Van Gorp, P. (2025). Class-Dependent Perturbation Effects in Evaluating Time Series Attributions. In: Guidotti, R., Schmid, U., Longo, L. (eds) Explainable Artificial Intelligence. xAI 2025. Communications in Computer and Information Science, vol 2579. Springer, Cham. https://doi.org/10.1007/978-3-032-08330-2_14</em></p>
             <div class="link-row">
               <a class="button primary" href="https://doi.org/10.1007/978-3-032-08330-2_14">DOI</a>
@@ -86,8 +86,8 @@
           <div class="project-copy">
             <p class="tag">Paper 2</p>
             <h3>Why do class-dependent evaluation effects occur?</h3>
-            <p class="takeaway">Takeaway: Class-dependent evaluation effects can come from simple differences between class features, such as amplitude or duration. Additionally, perturbation metrics can disagree with ground-truth metrics,  so you may want to be careful in making comparisons.</p>
-            <p>The paper uses synthetic time series with known relevant feature locations to study when class-dependent evaluation effects occur. By varying feature types and class contrasts, it shows that these effects can appear even in simple controlled settings.</p>
+            <p class="takeaway">Takeaway: Class-dependent evaluation effects can come from simple differences between class features, such as amplitude or duration of time series features.  Additionally, perturbation metrics can disagree with ground-truth-based metrics,  so you may want to be careful in making comparisons.</p>
+            <p>The paper uses synthetic time series with known relevant feature locations to study when class-dependent evaluation effects occur. By varying feature types and class differences, it shows that these effects can appear even in simple controlled settings.</p>
             <p>The results show that perturbation-based evaluation metrics and ground-truth-based metrics often provide different views of attribution quality across classes.</p>
             <p class="citation"><em>Baer, G., Grau, I., Zhang, C., Van Gorp, P. (2026). Why do Class-Dependent Evaluation Effects Occur with Time Series Feature Attributions? A Synthetic Data Investigation. In: Koprinska, I., Mendes-Moreira, J., Branco, P. (eds) Machine Learning and Principles and Practice of Knowledge Discovery in Databases. ECML PKDD 2025. Communications in Computer and Information Science, vol 2842. Springer, Cham. https://doi.org/10.1007/978-3-032-19105-2_27</em></p>
             <div class="link-row">
@@ -123,7 +123,7 @@
             <p class="eyebrow">Human-centric evaluation</p>
             <h2>Computational metrics and human understanding</h2>
           </div>
-          <p>A computational evaluation metric is useful only if we know what it tells us. This project studies how computational explanation correctness relates to whether people can understand AI decision patterns.</p>
+          <p>Computational evaluation metric can be useful to test whether explanations are "correct" in a technical sense, but in the end we may want to know whether explanations are useful to humans. This project studies how computational explanation correctness relates to whether people can understand AI decision patterns.</p>
         </div>
 
         <article class="project project-single">

@@ -3,8 +3,7 @@ site:
   title: Evaluation of Explainable AI for Time Series
   description: >-
     A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD.
-    Contains work on evaluating explainable AI methods for time-series models, including perturbation metrics, ground-truth evaluation,
-    human understanding, and xaitimesynth.
+    Contains work on evaluating explainable AI methods, including perturbation metrics, ground-truth-based evaluation, and human understanding.
 
 brand:
   name: Gregor Baer
@@ -27,9 +26,8 @@ hero:
   eyebrow: Research overview
   title: Evaluation of Explainable AI for Time Series
   intro: >-
-    My PhD research focuses on evaluating explanations of AI decisions, primarily in the context of
-    time series. This page collects various projects that I have worked on in my PhD, including 
-    computational evaluation of explainable AI (XAI) explanations, and more human-centric evaluation.
+    My PhD research focuses on the evaluation of explainable AI (XAI) methods. I am interested
+    in how we can reliably assess the (computaional) correctness of explanations, and how that may (or may not) relate to human outcomes such as understanding.
   visual:
     src: assets/hero/fig_example_ts_hm.png
     alt: ""
@@ -43,10 +41,10 @@ sections:
     title: Class-dependent evaluation effects
     description: >-
       Perturbation analysis is often used to evaluate how "correct" explanations are. 
-      In the below projects, we studied when that evaluation depends on the predicted class, 
-      and what that means for trusting the perturbation metrics.
-      Here, we applied evaluation metrics to feature attribution explanations, 
-      which compute importance scores to input features (time points) for a specific prediction.
+      It's also unclear, however, how reliable perturbation metrics are as the results can depend a 
+      lot on how you perturb the data.
+      In the below projects, we studied how sensitive perturbation metrics can be to dataset-specific
+      characteristics like class membership, which can drive biased evaluation results.
     projects:
       - slug: class-dependent-perturbation-effects
         classes:
@@ -55,15 +53,17 @@ sections:
         title: Class-dependent perturbation effects in evaluating time-series attributions
         takeaway: >-
           Takeaway: Perturbation-based evaluation metrics can behave very differently
-          across classes, even for the same dataset and model. This implies strong
-          aggregate scores can reflect class-specific model behavior rather than better
-          attribution quality.
+          across classes, even for the same dataset and model. Without checking for class-dependence,
+          good average evaluation scores may be driven by good performance for one class.
         body:
           - >-
-            The paper evaluates feature attribution explanation methods across datasets, model
+            We evaluate feature attribution methods across datasets, model
             architectures, and perturbation strategies in the context of time series classification. 
-            It finds that perturbation metrics can be sensitive for some classes and much less sensitive for others,
-            with the strongest perturbation strategies often showing the largest class differences.
+            We find that perturbation metrics can be sensitive for some classes and much less sensitive for others, with the strongest perturbation strategies often showing the largest class differences.
+            This is somewhat troubling, as we don't know a priori what "good" perturbations are, or
+            which classes are most sensitive to perturbation. Moreover, we don't know necessarily
+            know whether the explanations are "bad" for the insensitive classes, or whether the 
+            evaluation approach may not be appropriate.
         citation: >-
           Baer, G., Grau, I., Zhang, C., Van Gorp, P. (2025). Class-Dependent Perturbation Effects in Evaluating Time Series Attributions. In: Guidotti, R., Schmid, U., Longo, L. (eds) Explainable Artificial Intelligence. xAI 2025. Communications in Computer and Information Science, vol 2579. Springer, Cham. https://doi.org/10.1007/978-3-032-08330-2_14
         links:
@@ -95,14 +95,14 @@ sections:
         title: Why do class-dependent evaluation effects occur?
         takeaway: >-
           Takeaway: Class-dependent evaluation effects can come from simple differences
-          between class features, such as amplitude or duration. Additionally,
-          perturbation metrics can disagree with ground-truth metrics, 
+          between class features, such as amplitude or duration of time series features. 
+          Additionally, perturbation metrics can disagree with ground-truth-based metrics, 
           so you may want to be careful in making comparisons.
         body:
           - >-
             The paper uses synthetic time series with known relevant feature locations to
             study when class-dependent evaluation effects occur. By varying feature types
-            and class contrasts, it shows that these effects can appear even in simple
+            and class differences, it shows that these effects can appear even in simple
             controlled settings.
           - >-
             The results show that perturbation-based evaluation metrics and
@@ -132,8 +132,9 @@ sections:
     eyebrow: Human-centric evaluation
     title: Computational metrics and human understanding
     description: >-
-      A computational evaluation metric is useful only if we know what it tells us. This
-      project studies how computational explanation correctness relates to whether people can
+      Computational evaluation metric can be useful to test whether explanations are "correct" in a
+      technical sense, but in the end we may want to know whether explanations are useful to humans.
+      This project studies how computational explanation correctness relates to whether people can
       understand AI decision patterns.
     projects:
       - slug: explanation-correctness
@@ -150,8 +151,7 @@ sections:
             In a user study, participants used explanations to predict an AI system's
             decisions in a time-series classification task. 
             This task is called forward simulation and can be seen as a proxy measure for understanding. 
-            The study controlled explanation correctness at four levels and found that understanding dropped
-            at 70% and 55% correctness compared with fully correct explanations, but did
+            The study controlled explanation correctness at four levels and found that understanding dropped at 70% and 55% correctness compared with fully correct explanations, but did
             not keep dropping below 70%. 
             100% and 85% correct explanations are statistically indistinguishable in terms of forward simulation accuracy.
           - >-
