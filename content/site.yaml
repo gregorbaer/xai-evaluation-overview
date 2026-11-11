@@ -5,6 +5,20 @@ site:
     A research overview of projects, papers and tools developed by Gregor Baer in the scope of his PhD.
     Contains work on evaluating explainable AI methods, including perturbation metrics, ground-truth-based evaluation, and human understanding.
 
+social:
+  url: https://gregorbaer.github.io/xai-evaluation-overview/
+  image: assets/social/preview.png
+  image_alt: >-
+    Title card "Evaluation of Explainable AI" by Gregor Baer with one figure from each
+    research project.
+  # One figure per project, in grid order (top-left, top-right, bottom-left, bottom-right).
+  # Regenerate the card with: uv run python scripts/build_social_card.py
+  card_figures:
+    - assets/class-dependent-perturbation-effects/fig1_class-dependent-perturbation-effects.png
+    - assets/why-class-dependent-effects/fig1_cdpe-why-schematic.png
+    - assets/explanation-correctness/fig1_study-design-correctness-understanding.png
+    - https://raw.githubusercontent.com/gregorbaer/xaitimesynth/main/docs/assets/images/quickstart_dataset.png
+
 brand:
   name: Gregor Baer
   href: "#top"

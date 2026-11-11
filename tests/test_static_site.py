@@ -1,5 +1,7 @@
+from html import unescape
 from html.parser import HTMLParser
 import re
+import struct
 from pathlib import Path
 import subprocess
 import sys
@@ -495,3 +497,71 @@ def test_readme_documents_website_generation_workflow():
     assert "uv run python scripts/build_site.py" in readme
     assert "uv run pytest -q" in readme
     assert "No server-side build step is required on GitHub Pages." in readme
+
+
+def png_size(path):
+    """Read a PNG's width and height from its IHDR chunk.
+
+    Args:
+        path: Path to a PNG file.
+
+    Returns:
+        Tuple of (width, height) in pixels.
+    """
+    header = Path(path).read_bytes()[:24]
+    assert header[:8] == b"\x89PNG\r\n\x1a\n", path
+    return struct.unpack(">II", header[16:24])
+
+
+def test_page_has_open_graph_preview_tags():
+    """Check link previews (LinkedIn etc.) get a title, description, and absolute image URL."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    head = html.split("</head>", maxsplit=1)[0]
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+    social = content["social"]
+
+    def meta(attribute, name):
+        match = re.search(rf'<meta {attribute}="{re.escape(name)}" content="([^"]*)">', head)
+        assert match, name
+        return unescape(match.group(1))
+
+    assert social["url"].startswith("https://") and social["url"].endswith("/")
+    assert meta("property", "og:type") == "website"
+    assert meta("property", "og:title") == content["site"]["title"]
+    assert meta("property", "og:description") == " ".join(content["site"]["description"].split())
+    assert meta("property", "og:url") == social["url"]
+    assert meta("property", "og:image") == social["url"] + social["image"]
+    assert meta("property", "og:image:width") == "1200"
+    assert meta("property", "og:image:height") == "627"
+    assert meta("property", "og:image:alt") == social["image_alt"]
+    assert meta("name", "twitter:card") == "summary_large_image"
+
+
+def test_social_card_image_exists_with_linkedin_size():
+    """Check the committed preview card is a 1200x627 PNG."""
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+    image = ROOT / content["social"]["image"]
+
+    assert image.exists(), image
+    assert png_size(image) == (1200, 627)
+
+
+def test_social_card_figures_cover_each_project_once():
+    """Check the card shows one figure per project, so it represents the breadth of work."""
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+    projects = [project for section in content["sections"] for project in section["projects"]]
+    card_figures = content["social"]["card_figures"]
+
+    owners = []
+    for figure in card_figures:
+        matches = [
+            project["slug"]
+            for project in projects
+            if figure in {item["src"] for item in project["figures"]}
+        ]
+        assert len(matches) == 1, figure
+        owners.append(matches[0])
+        if not urlparse(figure).scheme:
+            assert (ROOT / figure).exists(), figure
+
+    assert sorted(owners) == sorted(project["slug"] for project in projects)

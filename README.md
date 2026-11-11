@@ -54,6 +54,22 @@ alt text, and the expected DOI, arXiv, documentation, GitHub, and Scholar links.
 They also check that the committed `index.html` matches the YAML-generated
 output.
 
+## Social Preview
+
+Link previews (LinkedIn, Slack, etc.) use the Open Graph tags generated from the
+`social` block in `content/site.yaml` and the card image `assets/social/preview.png`.
+
+- `card_figures` lists one figure per project; the tests check this.
+- After changing the title or card figures, regenerate the card (needs a local
+  Chrome/Chromium, or pass `--chrome PATH`):
+
+```bash
+uv run python scripts/build_social_card.py
+```
+
+- LinkedIn caches previews. After pushing, paste the page URL into the
+  [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) to refresh it.
+
 ## GitHub Pages
 
 In the repository settings on GitHub:

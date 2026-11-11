@@ -110,6 +110,7 @@ def render_site(content: dict[str, Any]) -> str:
         '      name="description"',
         f'      content="{attr(site["description"])}"',
         "    >",
+        *render_social_meta(content),
         '    <link rel="preconnect" href="https://fonts.googleapis.com">',
         '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
         '    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">',
@@ -130,6 +131,35 @@ def render_site(content: dict[str, Any]) -> str:
     ]
     return "\n".join(lines)
 
+
+
+def render_social_meta(content: dict[str, Any]) -> list[str]:
+    """Render Open Graph and Twitter card tags for link previews.
+
+    LinkedIn, Slack, and similar services read these tags to build a link
+    preview; without them they guess a thumbnail from the page images.
+
+    Args:
+        content: Parsed YAML site content with ``site`` and ``social`` entries.
+
+    Returns:
+        Indented ``<meta>`` lines for the document head.
+    """
+    site = content["site"]
+    social = content["social"]
+    description = " ".join(site["description"].split())
+    tags = [
+        ("property", "og:type", "website"),
+        ("property", "og:title", site["title"]),
+        ("property", "og:description", description),
+        ("property", "og:url", social["url"]),
+        ("property", "og:image", social["url"] + social["image"]),
+        ("property", "og:image:width", "1200"),
+        ("property", "og:image:height", "627"),
+        ("property", "og:image:alt", " ".join(social["image_alt"].split())),
+        ("name", "twitter:card", "summary_large_image"),
+    ]
+    return [f'    <meta {kind}="{attr(name)}" content="{attr(value)}">' for kind, name, value in tags]
 
 def render_header(content: dict[str, Any]) -> str:
     """Render the top navigation and hero.
