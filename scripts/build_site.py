@@ -110,13 +110,16 @@ def render_site(content: dict[str, Any]) -> str:
         '      name="description"',
         f'      content="{attr(site["description"])}"',
         "    >",
+        '    <link rel="preconnect" href="https://fonts.googleapis.com">',
+        '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+        '    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">',
         '    <link rel="stylesheet" href="styles.css">',
         "  </head>",
         "  <body>",
         render_header(content),
         "",
         "    <main>",
-        *[render_section(section, index) for index, section in enumerate(content["sections"])],
+        *[render_section(section) for section in content["sections"]],
         "    </main>",
         "",
         render_footer(content["footer"]),
@@ -144,19 +147,12 @@ def render_header(content: dict[str, Any]) -> str:
         f'          <a href="{attr(item["href"])}">{text(item["label"])}</a>'
         for item in content["nav"]
     )
-    hero_actions = render_link_row(
-        hero.get("actions", []),
-        "hero-actions",
-        "Primary links",
-        indent=10,
-    )
     portrait_attrs = {
         "class": "brand-portrait",
         "src": portrait["src"],
         "alt": portrait.get("alt", ""),
         "aria-hidden": "true" if portrait.get("hidden") else None,
     }
-    hero_visual = render_hero_visual(hero.get("visual"))
 
     return "\n".join(
         [
@@ -172,68 +168,29 @@ def render_header(content: dict[str, Any]) -> str:
             "      </nav>",
             "",
             f'      <section class="hero" id="{attr(hero["id"])}">',
-            '        <div class="hero-copy">',
-            f'          <p class="eyebrow">{text(hero["eyebrow"])}</p>',
-            f"          <h1>{text(hero['title'])}</h1>",
-            f'          <p class="intro">{text(hero["intro"])}</p>',
-            hero_visual,
-            *([hero_actions] if hero_actions else []),
-            "        </div>",
+            f"        <h1>{text(hero['title'])}</h1>",
+            f'        <p class="intro">{text(hero["intro"])}</p>',
             "      </section>",
             "    </header>",
         ]
     )
 
 
-def render_hero_visual(visual: dict[str, Any] | None) -> str:
-    """Render an optional decorative hero image.
-
-    Args:
-        visual: Image metadata, or None when the hero has no visual.
-
-    Returns:
-        Hero visual HTML or an empty string.
-    """
-    if not visual:
-        return ""
-
-    image_attrs = {
-        "class": "hero-heatmap",
-        "src": visual["src"],
-        "alt": visual.get("alt", ""),
-        "aria-hidden": "true" if visual.get("hidden") else None,
-    }
-    return "\n".join(
-        [
-            '          <figure class="hero-visual">',
-            f"            <img{render_attrs(image_attrs)}>",
-            "          </figure>",
-        ]
-    )
-
-
-def render_section(section: dict[str, Any], index: int) -> str:
+def render_section(section: dict[str, Any]) -> str:
     """Render a content section and its projects.
 
     Args:
         section: Section content.
-        index: Zero-based section index after the hero.
 
     Returns:
         Section HTML.
     """
-    section_classes = ["section", *section.get("classes", [])]
-    if index % 2 == 0:
-        section_classes.append("section-muted")
     project_blocks = [render_project(project) for project in section["projects"]]
     return "\n".join(
         [
-            f'      <section class="{attr(" ".join(section_classes))}" id="{attr(section["id"])}">',
+            f'      <section class="section" id="{attr(section["id"])}">',
             '        <div class="section-heading">',
-            '          <div class="section-title">',
-            f'            <p class="eyebrow">{text(section["eyebrow"])}</p>',
-            f"            <h2>{text(section['title'])}</h2>",
-            "          </div>",
+            f"          <h2>{text(section['title'])}</h2>",
             f"          <p>{text(section['description'])}</p>",
             "        </div>",
             "",
@@ -245,7 +202,7 @@ def render_section(section: dict[str, Any], index: int) -> str:
 
 
 def render_project(project: dict[str, Any]) -> str:
-    """Render one project card.
+    """Render one project as title, then description and links, then figures.
 
     Args:
         project: Project content.
@@ -253,80 +210,71 @@ def render_project(project: dict[str, Any]) -> str:
     Returns:
         Project HTML.
     """
-    project_classes = ["project", *project.get("classes", [])]
-    body = "\n".join(f"            <p>{text(paragraph)}</p>" for paragraph in project["body"])
-    citation = render_citation(project.get("citation"))
-    link_row = render_link_row(project["links"], "link-row", None, indent=12)
-    visual = render_project_visual(project)
+    description = [f"            <p>{text(paragraph)}</p>" for paragraph in project["description"]]
+    links = render_link_row(project["links"], project.get("citation"), indent=12)
 
-    parts = [
-        f'        <article class="{attr(" ".join(project_classes))}">',
-        '          <div class="project-copy">',
-        f'            <p class="tag">{text(project["tag"])}</p>',
-        f"            <h3>{text(project['title'])}</h3>",
-        f'            <p class="takeaway">{text(project["takeaway"])}</p>',
-        body,
-    ]
-    if citation:
-        parts.append(citation)
-    parts.extend(
+    return "\n".join(
         [
-            link_row,
+            f'        <article class="project" id="{attr(project["slug"])}">',
+            '          <header class="project-head">',
+            f"            <h3>{text(project['title'])}</h3>",
+            f'            <p class="byline">{text(project["byline"])}</p>',
+            "          </header>",
+            '          <div class="project-copy">',
+            *description,
+            links,
             "          </div>",
-            visual,
+            render_project_visual(project),
             "        </article>",
         ]
     )
-    return "\n".join(parts)
 
 
-def render_citation(citation: str | None) -> str:
-    """Render a project citation as an emphasized formatted string.
+def render_citation(citation: str | None, indent: int = 14) -> str:
+    """Render a full citation behind a collapsible Cite toggle.
 
     Args:
         citation: Complete formatted citation, or None when no citation should render.
+        indent: Number of spaces to prepend to the generated line.
 
     Returns:
-        Citation paragraph HTML or an empty string.
+        Citation details HTML or an empty string.
     """
     if not citation:
         return ""
 
     return (
-        '            <p class="citation">'
-        f"<em>{text(citation)}</em></p>"
+        f'{" " * indent}<details class="cite"><summary>Cite</summary>'
+        f"<p>{text(citation)}</p></details>"
     )
 
 
 def render_link_row(
     links: list[dict[str, str]],
-    class_name: str,
-    aria_label: str | None,
+    citation: str | None,
     indent: int,
 ) -> str:
-    """Render a row of styled links.
+    """Render a row of plain external links with an optional Cite toggle.
 
     Args:
-        links: Link definitions with labels, URLs, and optional styles.
-        class_name: CSS class for the containing row.
-        aria_label: Optional accessible label for the row.
+        links: Link definitions with labels and URLs.
+        citation: Full citation shown behind a Cite toggle, or None.
         indent: Number of spaces to prepend to each generated line.
 
     Returns:
-        Link row HTML.
+        Link row HTML, or an empty string when there is nothing to show.
     """
-    spaces = " " * indent
-    label_attr = f' aria-label="{attr(aria_label)}"' if aria_label else ""
-    if not links:
+    if not links and not citation:
         return ""
 
-    lines = [f'{spaces}<div class="{attr(class_name)}"{label_attr}>']
-    for link in links:
-        style = link.get("style", "secondary")
-        lines.append(
-            f'{spaces}  <a class="button {attr(style)}" href="{attr(link["href"])}">'
-            f'{text(link["label"])}</a>'
-        )
+    spaces = " " * indent
+    lines = [f'{spaces}<div class="links">']
+    lines.extend(
+        f'{spaces}  <a class="ext" href="{attr(link["href"])}">{text(link["label"])}</a>'
+        for link in links
+    )
+    if citation:
+        lines.append(render_citation(citation, indent=indent + 2))
     lines.append(f"{spaces}</div>")
     return "\n".join(lines)
 
@@ -451,10 +399,7 @@ def render_gallery_thumbnails(slug: str, figures: list[dict[str, str]]) -> list[
                     f' data-gallery-alt="{attr(figure["alt"])}"'
                     f' data-gallery-caption="{attr(figure.get("caption", "").strip())}">'
                 ),
-                (
-                    f'                  <img src="{attr(figure["src"])}" alt=""'
-                    ' aria-hidden="true">'
-                ),
+                (f'                  <img src="{attr(figure["src"])}" alt="" aria-hidden="true">'),
                 "                </button>",
             ]
         )
@@ -471,16 +416,12 @@ def render_footer(footer: dict[str, Any]) -> str:
     Returns:
         Footer HTML.
     """
-    footer_links = "\n".join(
-        render_footer_link(link, indent=8)
-        for link in footer["links"]
-    )
+    footer_links = "\n".join(render_footer_link(link, indent=8) for link in footer["links"])
     return "\n".join(
         [
             '    <footer class="site-footer">',
             '      <div class="footer-meta">',
             f"        <p>{text(footer['text'])}</p>",
-            f'        <p class="ai-disclaimer">{text(footer["disclaimer"])}</p>',
             "      </div>",
             '      <div class="footer-links">',
             footer_links,
@@ -600,7 +541,9 @@ def render_attrs(attributes: dict[str, str | None]) -> str:
     Returns:
         String beginning with a space when attributes are present.
     """
-    rendered = [f'{name}="{attr(value)}"' for name, value in attributes.items() if value is not None]
+    rendered = [
+        f'{name}="{attr(value)}"' for name, value in attributes.items() if value is not None
+    ]
     if not rendered:
         return ""
     return " " + " ".join(rendered)

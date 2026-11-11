@@ -1,4 +1,5 @@
 from html.parser import HTMLParser
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -88,26 +89,25 @@ def test_project_citations_are_single_editable_strings():
     assert all(isinstance(citation, str) for citation in citations)
 
 
-def test_project_citation_is_fully_italicized():
-    """Check complete citation strings render in one emphasized block."""
+def test_project_citation_renders_as_collapsible_cite():
+    """Check full citations sit behind a small collapsible Cite toggle."""
     citation = build_site.render_citation("Author. (2026). Complete citation.")
 
-    assert (
-        citation
-        == '            <p class="citation"><em>Author. (2026). Complete citation.</em></p>'
-    )
-
+    assert citation.strip().startswith('<details class="cite">')
+    assert "<summary>Cite</summary>" in citation
+    assert "Author. (2026). Complete citation." in citation
+    assert build_site.render_citation(None) == ""
 
 def test_page_uses_research_overview_framing():
     """Check the page has moved beyond the old conference framing."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     parser = parse_site()
 
-    assert "Evaluation of Explainable AI for Time Series" in parser.headings
+    assert "Evaluation of Explainable AI" in parser.headings
+    assert "Evaluation of Explainable AI for Time Series" not in parser.headings
     assert "Class-dependent evaluation effects" in parser.headings
     assert "Computational metrics and human understanding" in parser.headings
     assert "Tools for controlled evaluation" in parser.headings
-    assert "Research overview" in html
     assert "Conference focus" not in html
     assert "Class-dependent evaluation of time-series explanations" not in parser.headings
 
@@ -131,21 +131,83 @@ def test_topbar_has_concise_navigation_and_portrait():
     assert any(image.get("src") == "assets/profile-pic-round.png" for image in parser.images)
 
 
-def test_hero_includes_decorative_heatmap_visual():
-    """Check the hero shows a decorative heatmap below the intro."""
+def test_hero_has_no_decorative_visual_or_eyebrow():
+    """Check the hero is reduced to title and intro."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
-    parser = parse_site()
-    hero_copy = html.split('<div class="hero-copy">', maxsplit=1)[1].split("</div>", maxsplit=1)[0]
 
-    assert 'class="hero-visual"' in html
-    assert hero_copy.index('class="intro"') < hero_copy.index('class="hero-visual"')
-    assert any(
-        image.get("src") == "assets/hero/fig_example_ts_hm.png"
-        and image.get("class") == "hero-heatmap"
-        and image.get("aria-hidden") == "true"
-        for image in parser.images
-    )
+    assert 'class="hero-visual"' not in html
+    assert "fig_example_ts_hm.png" not in html
+    assert not hasattr(build_site, "render_hero_visual")
 
+
+def test_header_band_padding_stays_compact():
+    """Check the header band keeps modest padding around topbar and hero."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    desktop_css, mobile_css = css.split("@media (max-width: 800px) {", maxsplit=1)
+    topbar_rule = desktop_css.split(".topbar {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    hero_rule = desktop_css.split(".hero {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    mobile_hero_rule = mobile_css.split(".hero {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+
+    def paddings(rule):
+        return [int(value) for value in re.findall(r"\d+", re.search(r"padding: ([^;]+);", rule).group(1))]
+
+    assert max(paddings(topbar_rule)) <= 14
+    assert max(paddings(hero_rule)) <= 36
+    assert max(paddings(mobile_hero_rule)) <= 32
+
+
+def test_decorative_labels_and_takeaway_boxes_are_removed():
+    """Check eyebrow labels, project tags, and takeaway boxes no longer render."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+
+    assert 'class="eyebrow"' not in html
+    assert 'class="tag"' not in html
+    assert 'class="takeaway"' not in html
+    assert 'class="button' not in html
+
+
+def test_projects_use_byline_and_description_fields():
+    """Check YAML projects carry a byline and a description, without old fields."""
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+    projects = [project for section in content["sections"] for project in section["projects"]]
+
+    assert projects
+    for project in projects:
+        assert project.get("byline", "").strip(), project["slug"]
+        assert project.get("description"), project["slug"]
+        assert all(isinstance(paragraph, str) for paragraph in project["description"])
+        for old_field in ("tag", "takeaway", "body"):
+            assert old_field not in project, (project["slug"], old_field)
+
+
+
+def test_project_text_precedes_figure():
+    """Check each project renders head, then description text, then the figure."""
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    articles = html.split('<article class="project"')[1:]
+
+    assert len(articles) == 4
+    assert 'class="lede"' not in html
+    for article in articles:
+        article = article.split("</article>", maxsplit=1)[0]
+        head = article.index('class="project-head"')
+        copy = article.index('class="project-copy"')
+        visual = article.index('class="project-visual"')
+        assert head < copy < visual
+        head_html = article[head:copy]
+        assert "<h3>" in head_html
+        assert 'class="byline"' in head_html
+
+
+
+def test_styles_avoid_shadows_and_rounded_frames():
+    """Check frames are square and flat; only the portrait stays round."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    rules = re.findall(r"([^{}]+)\{([^{}]*)\}", css)
+
+    assert "box-shadow" not in css
+    rounded = [selector.strip() for selector, body in rules if "border-radius" in body]
+    assert rounded == [".brand-portrait"]
 
 def test_generator_supports_thumbnail_galleries_for_future_projects():
     """Check multi-figure gallery rendering stays available for future projects."""
@@ -208,82 +270,66 @@ def test_section_overviews_are_full_width_stacked_blocks():
     assert "grid-template-columns" not in section_heading_rule
 
 
-def test_section_backgrounds_stay_neutral_while_project_borders_keep_color():
-    """Check section bands are neutral and project cards keep color accents."""
-    css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    section_muted_rule = css.split(".section-muted {", maxsplit=1)[1].split("}", maxsplit=1)[0]
 
-    assert "background: var(--section-muted)" in section_muted_rule
-    assert "var(--yellow-soft)" not in section_muted_rule
-    assert "var(--green-soft)" not in section_muted_rule
-    assert ".project-featured:first-of-type" in css
-    assert ".project-featured:nth-of-type(2)" in css
-    assert ".project-single" in css
-    assert ".tool-project" in css
-
-
-def test_section_bands_use_the_same_page_gutter_as_other_content():
-    """Check full-width section bands keep content aligned with the page gutter."""
+def test_page_shell_uses_shared_gutter():
+    """Check content and the full-bleed header/footer bands share one side gutter."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     root_rule = css.split(":root {", maxsplit=1)[1].split("}", maxsplit=1)[0]
-    page_shell_rule = css.split(".site-header,", maxsplit=1)[1].split("}", maxsplit=1)[0]
-    section_muted_rule = css.split(".section-muted {", maxsplit=1)[1].split("}", maxsplit=1)[0]
-    mobile_rule = css.split("@media (max-width: 640px) {", maxsplit=1)[1]
+    page_shell_rule = css.split("\nmain {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    band_rule = css.split(".site-header,\n.site-footer {", maxsplit=1)[1].split("}", maxsplit=1)[0]
 
     assert "--page-gutter: 16px" in root_rule
     assert "100% - var(--page-gutter) - var(--page-gutter)" in page_shell_rule
-    assert "padding-right: max(var(--page-gutter)" in section_muted_rule
-    assert "padding-left: max(var(--page-gutter)" in section_muted_rule
-    assert "100% - 24px" not in mobile_rule
+    assert "padding-inline: max(var(--page-gutter)" in band_rule
 
 
-def test_mobile_section_headings_align_with_project_card_text():
-    """Check mobile section intros keep the same readable inset as card content."""
+def test_header_and_footer_are_charcoal_bands_with_white_text():
+    """Check header and footer share a charcoal band with white text on a warm page."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    mobile_rule = css.split("@media (max-width: 640px) {", maxsplit=1)[1]
-    project_rule = mobile_rule.split(".project {", maxsplit=1)[1].split("}", maxsplit=1)[0]
-    section_heading_rule = mobile_rule.split(".section-heading {", maxsplit=1)[1].split(
-        "}",
-        maxsplit=1,
-    )[0]
+    root_rule = css.split(":root {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    band_rule = css.split(".site-header,\n.site-footer {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    paper = re.search(r"--paper:\s*(#[0-9a-fA-F]+)", root_rule).group(1).lower()
 
-    assert "padding: 18px" in project_rule
-    assert "padding-inline: 18px" in section_heading_rule
-
-
-def test_section_background_alternation_starts_after_hero():
-    """Check generated section backgrounds alternate from the first section."""
-    html = (ROOT / "index.html").read_text(encoding="utf-8")
-    content = build_site.load_site(ROOT / "content" / "site.yaml")
-
-    assert '<section class="section section-lead section-muted" id="papers">' in html
-    assert '<section class="section" id="metrics">' in html
-    assert '<section class="section section-muted" id="tool">' in html
-    assert all(
-        "section-muted" not in section.get("classes", [])
-        for section in content["sections"]
-    )
+    assert paper not in {"#fff", "#ffffff", "#fbfaf7"}
+    assert "--band: #2a2e33" in root_rule
+    assert "--band-heading: #ffffff" in root_rule
+    assert "background: var(--band)" in band_rule
+    html_rule = css.split("\nhtml {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    assert "background: var(--band)" in html_rule, "overscroll below footer stays charcoal"
 
 
 def test_project_figure_surfaces_are_neutral():
-    """Check figure frames avoid tinted backgrounds that compete with plots."""
+    """Check figures sit on plain white surfaces without tinted backgrounds."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    gallery_frame_rule = css.split(".gallery-frame {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    gallery_image_rule = css.split(".gallery-main-image {", maxsplit=1)[1].split("}", maxsplit=1)[0]
     figure_stack_rule = css.split(".project-figure-stack {", maxsplit=1)[1].split("}", maxsplit=1)[
         0
     ]
 
-    assert "background: var(--surface)" in gallery_frame_rule
+    assert "background: var(--surface)" in gallery_image_rule
     assert "background: var(--surface)" in figure_stack_rule
-    assert "linear-gradient" not in gallery_frame_rule
-    assert "linear-gradient" not in figure_stack_rule
-    assert "var(--green-soft)" not in figure_stack_rule
+    assert "padding: var(--figure-mat)" in gallery_image_rule, "white margin around figure edges"
+    assert "--figure-mat:" in css.split(":root {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    assert "linear-gradient" not in css
+
+
+
+def test_desktop_figures_are_compact_previews_beside_text():
+    """Check desktop figures are short previews placed beside the description."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    desktop_css = css.split("@media (max-width: 800px) {", maxsplit=1)[0]
+    project_rule = desktop_css.split(".project {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    frame_rule = desktop_css.split(".gallery-frame {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    max_height = re.search(r"height: clamp\([^,]+,[^,]+,\s*(\d+)px\)", frame_rule)
+
+    assert '"copy visual"' in project_rule
+    assert max_height and int(max_height.group(1)) <= 320
 
 
 def test_mobile_gallery_figures_can_shrink_to_screen_width():
-    """Check mobile gallery frames do not force figures wider than their card."""
+    """Check mobile figures fit the screen width with a height cap for tall figures."""
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
-    mobile_rule = css.split("@media (max-width: 640px) {", maxsplit=1)[1]
+    mobile_rule = css.split("@media (max-width: 800px) {", maxsplit=1)[1]
     gallery_frame_rule = mobile_rule.split(".gallery-frame {", maxsplit=1)[1].split(
         "}",
         maxsplit=1,
@@ -293,19 +339,38 @@ def test_mobile_gallery_figures_can_shrink_to_screen_width():
         maxsplit=1,
     )[0]
 
-    assert "min-height: 0" in gallery_frame_rule
-    assert "aspect-ratio: auto" in gallery_frame_rule
+    max_height = re.search(r"max-height: (\d+)px", gallery_image_rule)
+
+    assert "height: auto" in gallery_frame_rule
+    assert "max-width: 100%" in gallery_image_rule
     assert "height: auto" in gallery_image_rule
-    assert "max-height: none" in gallery_image_rule
+    assert max_height and int(max_height.group(1)) <= 340, "tall figures need a mobile cap"
 
 
-def test_footer_includes_subtle_ai_disclaimer():
-    """Check the footer includes a compact AI coding tools note."""
+def test_header_band_colors_come_from_band_tokens():
+    """Check every header color is a band token, so a theme swap only edits :root."""
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    root_rule = css.split(":root {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+    nav_rule = css.split(".nav-links a {", maxsplit=1)[1].split("}", maxsplit=1)[0]
+
+    for token in ("--band:", "--band-heading:", "--band-text:", "--band-muted:", "--band-rule:"):
+        assert token in root_rule, token
+    assert "color: var(--band-muted)" in nav_rule
+
+
+
+def test_footer_is_a_single_slim_line():
+    """Check the footer drops the AI note and keeps compact vertical padding."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
+    content = build_site.load_site(ROOT / "content" / "site.yaml")
+    footer_rule = re.search(r"(?m)(?<!,\n)^\.site-footer \{([^}]*)\}", css).group(1)
+    padding = re.search(r"padding-block: (\d+)px(?: (\d+)px)?", footer_rule)
 
-    assert "This website was generated with the help of AI coding tools." in html
-    assert ".ai-disclaimer" in css
+    assert "AI coding tools" not in html
+    assert "ai-disclaimer" not in css
+    assert "disclaimer" not in content["footer"]
+    assert padding and all(int(value) <= 20 for value in padding.groups() if value)
 
 
 def test_footer_links_include_icons_and_visible_labels():

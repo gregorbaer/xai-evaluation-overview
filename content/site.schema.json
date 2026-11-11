@@ -2,63 +2,104 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "XAI Evaluation Overview Site Content",
   "type": "object",
-  "required": ["site", "brand", "nav", "hero", "sections", "footer"],
+  "required": [
+    "site",
+    "brand",
+    "nav",
+    "hero",
+    "sections",
+    "footer"
+  ],
   "additionalProperties": false,
   "properties": {
     "site": {
       "type": "object",
-      "required": ["language", "title", "description"],
+      "required": [
+        "language",
+        "title",
+        "description"
+      ],
       "additionalProperties": false,
       "properties": {
-        "language": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" }
+        "language": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
       }
     },
     "brand": {
       "type": "object",
-      "required": ["name", "href", "portrait"],
+      "required": [
+        "name",
+        "href",
+        "portrait"
+      ],
       "additionalProperties": false,
       "properties": {
-        "name": { "type": "string" },
-        "href": { "type": "string" },
-        "portrait": { "$ref": "#/$defs/image" }
+        "name": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        },
+        "portrait": {
+          "$ref": "#/$defs/image"
+        }
       }
     },
     "nav": {
       "type": "array",
-      "items": { "$ref": "#/$defs/link" }
+      "items": {
+        "$ref": "#/$defs/link"
+      }
     },
     "hero": {
       "type": "object",
-      "required": ["id", "eyebrow", "title", "intro"],
+      "required": [
+        "id",
+        "title",
+        "intro"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string" },
-        "eyebrow": { "type": "string" },
-        "title": { "type": "string" },
-        "intro": { "type": "string" },
-        "visual": { "$ref": "#/$defs/image" },
-        "actions": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/actionLink" }
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "intro": {
+          "type": "string"
         }
       }
     },
     "sections": {
       "type": "array",
-      "items": { "$ref": "#/$defs/section" }
+      "items": {
+        "$ref": "#/$defs/section"
+      }
     },
     "footer": {
       "type": "object",
-      "required": ["text", "disclaimer", "links"],
+      "required": [
+        "text",
+        "links"
+      ],
       "additionalProperties": false,
       "properties": {
-        "text": { "type": "string" },
-        "disclaimer": { "type": "string" },
+        "text": {
+          "type": "string"
+        },
         "links": {
           "type": "array",
-          "items": { "$ref": "#/$defs/link" }
+          "items": {
+            "$ref": "#/$defs/link"
+          }
         }
       }
     }
@@ -66,89 +107,125 @@
   "$defs": {
     "section": {
       "type": "object",
-      "required": ["id", "eyebrow", "title", "description", "projects"],
+      "required": [
+        "id",
+        "title",
+        "description",
+        "projects"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string" },
-        "classes": {
-          "type": "array",
-          "items": { "type": "string" }
+        "id": {
+          "type": "string"
         },
-        "eyebrow": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "projects": {
           "type": "array",
-          "items": { "$ref": "#/$defs/project" }
+          "items": {
+            "$ref": "#/$defs/project"
+          }
         }
       }
     },
     "project": {
       "type": "object",
-      "required": ["slug", "classes", "tag", "title", "takeaway", "body", "links", "figures"],
+      "required": [
+        "slug",
+        "title",
+        "byline",
+        "description",
+        "links",
+        "figures"
+      ],
       "additionalProperties": false,
       "properties": {
-        "slug": { "type": "string" },
+        "slug": {
+          "type": "string"
+        },
         "figure_display": {
           "type": "string",
-          "enum": ["stack"]
+          "enum": [
+            "stack"
+          ]
         },
-        "classes": {
+        "title": {
+          "type": "string"
+        },
+        "byline": {
+          "type": "string"
+        },
+        "description": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
         },
-        "tag": { "type": "string" },
-        "title": { "type": "string" },
-        "takeaway": { "type": "string" },
-        "body": {
-          "type": "array",
-          "items": { "type": "string" }
+        "citation": {
+          "type": "string"
         },
-        "citation": { "type": "string" },
         "links": {
           "type": "array",
-          "items": { "$ref": "#/$defs/actionLink" }
+          "items": {
+            "$ref": "#/$defs/link"
+          }
         },
         "figures": {
           "type": "array",
-          "items": { "$ref": "#/$defs/image" }
+          "items": {
+            "$ref": "#/$defs/image"
+          }
         }
       }
     },
     "image": {
       "type": "object",
-      "required": ["src", "alt"],
+      "required": [
+        "src",
+        "alt"
+      ],
       "additionalProperties": false,
       "properties": {
-        "src": { "type": "string" },
-        "alt": { "type": "string" },
-        "hidden": { "type": "boolean" },
-        "caption": { "type": "string" }
+        "src": {
+          "type": "string"
+        },
+        "alt": {
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "caption": {
+          "type": "string"
+        }
       }
     },
     "link": {
       "type": "object",
-      "required": ["label", "href"],
+      "required": [
+        "label",
+        "href"
+      ],
       "additionalProperties": false,
       "properties": {
-        "label": { "type": "string" },
-        "href": { "type": "string" },
+        "label": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        },
         "icon": {
           "type": "string",
-          "enum": ["github", "linkedin", "scholar"]
-        }
-      }
-    },
-    "actionLink": {
-      "type": "object",
-      "required": ["label", "href"],
-      "additionalProperties": false,
-      "properties": {
-        "label": { "type": "string" },
-        "href": { "type": "string" },
-        "style": {
-          "type": "string",
-          "enum": ["primary", "secondary"]
+          "enum": [
+            "github",
+            "linkedin",
+            "scholar"
+          ]
         }
       }
     }

@@ -12,7 +12,9 @@ and local figures in [`assets/`](assets). GitHub Pages serves the generated
 - Edit page content, links, and figure metadata in `content/site.yaml`.
 - Edit the visual theme in `styles.css`.
 - Keep local project figures in `assets/<project-slug>/`.
-- Use `writing_guidelines.md` as the tone guide for future copy edits.
+- Each project has a short `byline` (venue/year · authors) shown under its title.
+- Each project's `description` is a list of paragraphs; end with the key takeaway.
+- The full `citation` is shown behind a collapsible "Cite" toggle.
 
 ## Website Generation
 
