@@ -144,6 +144,9 @@ sections:
           - src: assets/explanation-correctness/fig3_learning_curves_ci.png
             alt: "Learning curves: Cumulative forward simulation accuracy across training trials by correctness condition, averaged over participants."
             caption: Participants in the 100% correct condition become more accurate over time in training. For the other conditions, this process is slower and stays closer to chance performance.
+          - src: assets/explanation-correctness/fig6_fsim_rule_relationship.png
+            alt: Relationship between forward simulatin accuracy and verbalized understanding, coded as correct, incorrect, or none.
+            caption: We also asked participants to verbalize their understanding of the AI's decisions. The relationship between forward simulation accuracy and the correctness of the verbalized understanding was not straightforward.
           - src: assets/explanation-correctness/fig4_explanation_ratings.png
             alt: Subjective ratings of explanation quality across correctness conditions.
             caption: We also measured subjective ratings of explanation quality.
