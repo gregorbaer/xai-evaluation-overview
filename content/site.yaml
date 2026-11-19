@@ -125,13 +125,11 @@ sections:
           - >-
             While computational correctness metrics are useful as a first evaluation step, we should be careful in assuming that higher correctness will automatically translate to better human understanding.
         citation: >-
-          Baer, G., Zhang, C., Grau, I., & Van Gorp, P. (2026). 
-          Does Explanation Correctness Matter? 
-          Linking Computational XAI Evaluation to Human Understanding. 
-          https://arxiv.org/abs/2603.25251v1
+          Baer, G., Zhang, C., Grau, I., & Van Gorp, P. (2027). Does explanation correctness matter? Linking computational XAI evaluation to human understanding. Knowledge-Based Systems, 355, 117321. https://doi.org/10.1016/j.knosys.2026.117321
+
         links:
           - label: DOI
-            href: https://doi.org/10.48550/arXiv.2603.25251
+            href: https://doi.org/10.1016/j.knosys.2026.117321
           - label: arXiv
             href: https://arxiv.org/abs/2603.25251
         figures:
