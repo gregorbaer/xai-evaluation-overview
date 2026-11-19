@@ -115,7 +115,7 @@ sections:
     projects:
       - slug: explanation-correctness
         title: Linking Computational XAI Evaluation to Human Understanding
-        byline: Preprint 2026 · Baer, Zhang, Grau, Van Gorp
+        byline: Knowledge-Based Systems 2027 · Baer, Zhang, Grau, Van Gorp
         description:
           - >-
             We recruited participants in an online user study to predict an AI system's decisions in a time series classification task with feature attribution-style explanations. Whether participants could predict the AI's decisions functioned as a proxy for one component of their understanding of the explanations.
